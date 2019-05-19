@@ -1,11 +1,3 @@
-//
-//  hellorectangle.cpp
-//  Learning OpenGL
-//
-//  Created by 赵伟 on 2019/5/19.
-//  Copyright © 2019 赵伟. All rights reserved.
-//
-
 #include <iostream>
 #include <unistd.h>
 #include <GL/glew.h>
