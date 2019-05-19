@@ -261,4 +261,4 @@ __pycache__/
 *.pyc
 
 # MAC Desktop Services Store
-*/.DS_Store
+*.DS_Store
