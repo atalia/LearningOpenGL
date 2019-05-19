@@ -260,5 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 
-# MAC avatar
-./DS_Store
+# MAC Desktop Services Store
+*/.DS_Store
