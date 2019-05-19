@@ -1,5 +1,5 @@
+#pragma comment(lib, "OpenGL32.lib")
 #include <iostream>
-#include <unistd.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
