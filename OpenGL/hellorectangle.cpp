@@ -11,14 +11,18 @@ const GLuint WINDOW_HEIGHT = 600;
 
 const GLchar *vertexaShaderSource = "#version 330 core\n"
 "layout(location=0) in vec3 position;\n"
+"vec4 vertexColor;\n"
 "void main()\n"
 "{\n"
-"gl_Position = vec4(position.x, position.y, position.z, 1.0f);}\0";
+"gl_Position = vec4(position.x, position.y, position.z, 1.0f);"
+"vertexColor = vec4(0.5f, 0.0f, 0.0f, 1.0f);\n"
+"}\0";
 const GLchar *fragmentShaderSource = "#version 330 core\n"
+"in vec4 vertexColor;\n"
 "out vec4 color;\n"
 "void main()\n"
 "{\n"
-"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"color = vertexColor;\n"
 "}\0";
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -171,7 +175,7 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     // VAO初始化结束
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     bool flag = true;
     int cnt = 0;
     //主循环

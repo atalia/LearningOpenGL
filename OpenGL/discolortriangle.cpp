@@ -9,16 +9,17 @@ const GLuint WINDOW_WIDTH = 800;
 const GLuint WINDOW_HEIGHT = 600;
 
 const GLchar *vertexaShaderSource = "#version 330 core\n"
-	"layout(location=0) in vec3 position;\n"
-	"void main()\n"
-	"{\n"
-	"gl_Position = vec4(position.x, position.y, position.z, 1.0f);}\0";
+"layout(location=0) in vec3 position;\n"
+"void main()\n"
+"{\n"
+"gl_Position = vec4(position.x, position.y, position.z, 1.0f);}\0";
 const GLchar *fragmentShaderSource = "#version 330 core\n"
-	"out vec4 color;\n"
-	"void main()\n"
-	"{\n"
-	"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	"}\0";
+"out vec4 color;\n"
+"uniform vec4 ourColor;\n"
+"void main()\n"
+"{\n"
+"color = ourColor;\n"
+"}\0";
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -32,7 +33,7 @@ GLFWwindow* create_window()
 {
 	if (!glfwInit())
 	{
-		std::cout << "Failed to init glfw : "<<std::endl;
+		std::cout << "Failed to init glfw : " << std::endl;
 		system("pause");
 		return NULL;
 	}
@@ -64,7 +65,7 @@ int main()
 	GLenum glInitStatus = glewInit();
 	if (glInitStatus != GLEW_OK)
 	{
-		std::cout << "Fail to init glew : " << glewGetErrorString(glInitStatus)<<std::endl;
+		std::cout << "Fail to init glew : " << glewGetErrorString(glInitStatus) << std::endl;
 		system("pause");
 		return -1;
 	}
@@ -117,6 +118,7 @@ int main()
 		return -1;
 	}
 	std::cout << "shaderProgram: " << shaderProgram << std::endl;
+
 	//激活着色器程序对象
 	glUseProgram(shaderProgram);
 	//删除片段着色器对象 + 顶点着色器对象
@@ -137,7 +139,7 @@ int main()
 	glGenBuffers(1, &VBO);//这句话会对VBO对象初始化，在此之前不可以使用VBO
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);//VBO对象绑定到GL_ARRAY_BUFFER(target name),之后对GL_ARRAY_BUFFER执行操作均会改变VBO
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verticles), verticles, GL_STATIC_DRAW);//将顶点数据复制到内存中
-	
+
 	//顶点着色器允许我们指定任何以顶点属性为形式的输入。
 	//这使其具有很强的灵活性的同时，它还的确意味着我们必须手动指定输入数据的哪一个部分对应顶点着色器的哪一个顶点属性。
 	//所以，我们必须在渲染前指定OpenGL该如何解释顶点数据。
@@ -156,22 +158,29 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	
-	
 
-	
-	
-	
+
+
+
+
 
 	//主循环
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
-		glClearColor(0.5f, 0.5f, 0.6f, 0.5f);
+		glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		
+
 		glUseProgram(shaderProgram);
+
+		//这里是核心代码
+		//更新uniform
+		GLfloat timeValue = glfwGetTime();
+		GLfloat colorValue = (sin(timeValue) / 2) + 0.5;
+		GLint vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+		glUniform4f(vertexColorLocation, colorValue * 0.5f, colorValue* 0.4, colorValue * 0.8f, 1.0f);
 		
+		//绘制三角形
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
