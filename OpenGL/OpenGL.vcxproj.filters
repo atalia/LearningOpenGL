@@ -17,7 +17,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="discolortriangle.cpp">
+    <ClCompile Include="multicolortriangle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
