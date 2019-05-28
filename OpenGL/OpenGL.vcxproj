@@ -70,8 +70,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\OpenCV\opencv\build\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\OpenCV\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>D:\OpenCV\opencv\build\x64\vc15\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -82,7 +83,7 @@
       <AdditionalIncludeDirectories>D:\CG\OpenGL\OpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_core2413.lib;opencv_imgproc2413.lib;opencv_highgui2413.lib;opencv_ml2413.lib;opencv_video2413.lib;opencv_features2d2413.lib;opencv_calib3d2413.lib;opencv_objdetect2413.lib;opencv_contrib2413.lib;opencv_legacy2413.lib;opencv_flann2413.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -123,14 +124,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="Hello Texture\shader.frag" />
+    <None Include="Hello Texture\shader.vert" />
     <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="shader.h" />
+    <ClCompile Include="Hello Texture\main.cpp" />
+    <ClCompile Include="Hello Texture\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="shader.cpp" />
+    <ClInclude Include="Hello Texture\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
