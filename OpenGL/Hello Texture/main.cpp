@@ -1,9 +1,8 @@
 #pragma comment(lib,"OpenGL32.lib")
-#include "Shader.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <opencv2/highgui/highgui.hpp>
-
+#include "Shader.h"
 
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;
@@ -32,9 +31,11 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
+	glfwMakeContextCurrent(window);
 	if (GLEW_OK != glewInit())
 	{
 		std::cout << "GLEW INIT FAILURE" << std::endl;
+		system("pause");
 		return -1;
 	}
 	int width, height;
@@ -53,7 +54,7 @@ int main()
 		1, 2, 3
 	};
 
-	Shader shader("shader.vert", "shader.vert");
+	Shader shader("E:\\LearningOpenGL\\OpenGL\\Hello Texture\\shader.vert", "E:\\LearningOpenGL\\OpenGL\\Hello Texture\\shader.frag");
 
 
 	GLuint VAO, VBO, VEO;
@@ -100,6 +101,7 @@ int main()
 	if (image.empty())
 	{
 		std::cout << "Texture picture is empty" <<std::endl;
+		system("pause");
 		return -1;
 	}
 	cv::Size sz = image.size();
@@ -121,6 +123,9 @@ int main()
 		// 清空颜色缓冲
 		glClear(GL_COLOR_BUFFER_BIT); //状态应用函数
 		// Render End
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		shader.Use();
 		glBindVertexArray(VAO);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

@@ -26,6 +26,7 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 	catch(std::ifstream::failure e)
 	{
 		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
+		system("pause");
 	}
 	const GLchar* vShaderCode = vertexCode.c_str();
 	const GLchar* fShaderCode = fragmentCode.c_str();
@@ -43,6 +44,7 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
         std::cout << vShaderCode << std::endl;
         glGetShaderInfoLog(vertex, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		system("pause");
     };
     //处理片段着色器
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -54,6 +56,7 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
         std::cout << fShaderCode << std::endl;
         glGetShaderInfoLog(fragment, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+		system("pause");
     }
     //连接顶点着色器和片段着色器
     this->Program = glCreateProgram();
@@ -63,8 +66,11 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
     glGetProgramiv(this->Program, GL_LINK_STATUS, &success);
     if(!success)
     {
+		std::cout << "vertex shader code:\n"<<vShaderCode << std::endl;
+		std::cout << "fragment shader code:\n"<<fShaderCode << std::endl;
         glGetProgramInfoLog(this->Program, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+		system("pause");
     }
     glDeleteShader(vertex);
     glDeleteShader(fragment);

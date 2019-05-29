@@ -74,6 +74,11 @@
     <LibraryPath>D:\OpenCV\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>D:\OpenCV\opencv\build\x64\vc15\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\OpenCV\build\x64\vc14\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -93,6 +98,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>opencv_world346d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
