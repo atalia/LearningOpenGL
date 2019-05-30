@@ -138,8 +138,8 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Hello Texture\main.cpp" />
     <ClCompile Include="Hello Texture\shader.cpp" />
+    <ClCompile Include="textures.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hello Texture\shader.h" />

@@ -26,7 +26,7 @@
     <ClCompile Include="Hello Texture\shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Hello Texture\main.cpp">
+    <ClCompile Include="textures.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
