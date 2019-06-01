@@ -103,7 +103,7 @@ int main()
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
 	//绑定图片
-	cv::Mat image = cv::imread("./Transformation/container.jpg", 1);
+	cv::Mat image = cv::imread("./Transformation/avatar.jpeg", 1);
 	if (image.empty())
 	{
 		std::cout << "Texture picture is empty" <<std::endl;
@@ -123,6 +123,8 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// 轮询检查
@@ -136,6 +138,7 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, texture);
 
 		shader.Use();
+		//第一个萝莉头
 		glBindVertexArray(VAO);
 
 		glm::mat4 trans(1.0f);
@@ -150,18 +153,46 @@ int main()
 
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
+		glm::mat2 texcordTrans(1.0f);
+
+		GLuint textcoordTranformLoc = glGetUniformLocation(shader.Program, "texcoordTransform");
+		glUniformMatrix2fv(textcoordTranformLoc, 1, GL_FALSE, glm::value_ptr(texcordTrans));
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
 		glBindVertexArray(0);
-		// 交换缓冲
+		
+		
+		//第二个萝莉头
+		glBindVertexArray(VAO);
+
+		trans = glm::mat4(1.0f);
+
+		trans = glm::translate(trans, glm::vec3(-0.5f, -0.5f, 0.f));
+
+		trans = glm::rotate(trans, glm::radians(currentTime * 90.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+
+		
+
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+		texcordTrans[0][0] = -1;
+
+		
+		glUniformMatrix2fv(textcoordTranformLoc, 1, GL_FALSE, glm::value_ptr(texcordTrans));
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		
+		glBindVertexArray(0);
+		
 		glfwSwapBuffers(window);
 	}
 
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
-
+	shader.~Shader();
 	glfwTerminate();
 	return 0;
 }
