@@ -70,14 +70,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\OpenCV\opencv\build\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\CG\OpenGL\include\glm\;D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
     <LibraryPath>D:\OpenCV\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>D:\OpenCV\opencv\build\x64\vc15\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
+    <IncludePath>D:\CG\OpenGL\include\glm\;D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
     <LibraryPath>D:\OpenCV\build\x64\vc14\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>D:\CG\OpenGL\include\glm\;D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\CG\OpenGL\include\glm\;D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -88,7 +94,8 @@
       <AdditionalIncludeDirectories>D:\CG\OpenGL\OpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opencv_core2413.lib;opencv_imgproc2413.lib;opencv_highgui2413.lib;opencv_ml2413.lib;opencv_video2413.lib;opencv_features2d2413.lib;opencv_calib3d2413.lib;opencv_objdetect2413.lib;opencv_contrib2413.lib;opencv_legacy2413.lib;opencv_flann2413.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world410d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\OpenCV\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -99,7 +106,8 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opencv_world346d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world410d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\OpenCV\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,6 +123,8 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opencv_world410d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\OpenCV\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,20 +139,26 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opencv_world410d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\OpenCV\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Hello Texture\shader.frag" />
-    <None Include="Hello Texture\shader.vert" />
     <None Include="packages.config" />
     <None Include="README.md" />
+    <None Include="Transformation\shader.frag" />
+    <None Include="Transformation\shader.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Hello Texture\shader.cpp" />
-    <ClCompile Include="textures.cpp" />
+    <Image Include="Transformation\container.jpg" />
+    <Image Include="Transformation\wall.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Hello Texture\shader.h" />
+    <ClCompile Include="Transformation\shader.cpp" />
+    <ClCompile Include="Transformation\Transform.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Transformation\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,23 +15,31 @@
     <None Include="README.md">
       <Filter>源文件</Filter>
     </None>
-    <None Include="Hello Texture\shader.frag">
+    <None Include="Transformation\shader.frag">
       <Filter>源文件</Filter>
     </None>
-    <None Include="Hello Texture\shader.vert">
+    <None Include="Transformation\shader.vert">
       <Filter>源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Hello Texture\shader.cpp">
+    <Image Include="Transformation\container.jpg">
+      <Filter>源文件</Filter>
+    </Image>
+    <Image Include="Transformation\wall.jpg">
+      <Filter>源文件</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Transformation\shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="textures.cpp">
+    <ClCompile Include="Transformation\Transform.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Hello Texture\shader.h">
+    <ClInclude Include="Transformation\shader.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
