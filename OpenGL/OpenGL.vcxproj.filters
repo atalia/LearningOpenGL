@@ -12,34 +12,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="README.md">
+    <None Include="Coordinate System\shader.frag">
       <Filter>源文件</Filter>
     </None>
-    <None Include="Transformation\shader.frag">
-      <Filter>源文件</Filter>
-    </None>
-    <None Include="Transformation\shader.vert">
+    <None Include="Coordinate System\shader.vert">
       <Filter>源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Transformation\container.jpg">
-      <Filter>源文件</Filter>
-    </Image>
-    <Image Include="Transformation\wall.jpg">
-      <Filter>源文件</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Transformation\shader.cpp">
+    <ClCompile Include="Coordinate System\CoordinateSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Transformation\Transform.cpp">
+    <ClCompile Include="Coordinate System\shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Transformation\shader.h">
+    <ClInclude Include="Coordinate System\shader.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
