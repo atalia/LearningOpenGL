@@ -6,6 +6,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "shader.h"
+#include <iostream>
+#include <string>
 
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;

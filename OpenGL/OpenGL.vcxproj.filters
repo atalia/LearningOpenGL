@@ -20,10 +20,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Coordinate System\CoordinateSystem.cpp">
+    <ClCompile Include="Coordinate System\shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Coordinate System\shader.cpp">
+    <ClCompile Include="Coordinate System\moreCubes.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
