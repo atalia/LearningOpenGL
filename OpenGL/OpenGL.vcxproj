@@ -70,20 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\CG\OpenGL\include\glm\;D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\OpenCV\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>D:\OpenCV\opencv\build\x64\vc15\bin;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;D:\CG\OpenGL\include\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>E:\LearningOpenGL\include\glm;D:\CG\OpenGL\include\glm\;D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\OpenCV\build\x64\vc14\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;D:\CG\OpenGL\include\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>D:\CG\OpenGL\include\glm\;D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
+    <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;D:\CG\OpenGL\include\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\CG\OpenGL\include\glm\;D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;$(IncludePath)</IncludePath>
+    <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;D:\CG\OpenGL\include\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

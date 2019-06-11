@@ -36,9 +36,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 }
 
-void move(Camera& camera)
+void move(Camera& camera, GLfloat& deltaTime)
 {
-	GLfloat speed = 1.0f;
+	GLfloat speed = 1.0f * deltaTime;
 	if (keys[GLFW_KEY_W])
 	{
 		camera.up(1.0f);
@@ -195,6 +195,7 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
@@ -202,8 +203,10 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		GLfloat currentTime = (GLfloat)glfwGetTime();
+		GLfloat deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
 		shader.Use();
-		move(camera);
+		move(camera, deltaTime);
 
 		glm::mat4 trans = glm::mat4(1.0f);
 		GLuint tranLoc = glGetUniformLocation(shader.Program, "transform");
@@ -235,8 +238,6 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (5 * sizeof(vertices[0])));
 		}
 		glBindTexture(GL_TEXTURE_2D, 0);
-
-
 
 		glfwSwapBuffers(window);
 	}
