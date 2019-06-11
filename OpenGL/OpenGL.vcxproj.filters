@@ -12,23 +12,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Coordinate System\shader.frag">
+    <None Include="Camera\shader.frag">
       <Filter>源文件</Filter>
     </None>
-    <None Include="Coordinate System\shader.vert">
+    <None Include="Camera\shader.vert">
       <Filter>源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Coordinate System\shader.cpp">
+    <ClCompile Include="Camera\moreCubes.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Coordinate System\moreCubes.cpp">
+    <ClCompile Include="Camera\shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Coordinate System\shader.h">
+    <ClInclude Include="Camera\shader.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
