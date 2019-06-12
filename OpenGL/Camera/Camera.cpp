@@ -36,3 +36,8 @@ glm::mat4  Camera::view()
 	glm::mat4 viewMat = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 	return viewMat;
 }
+
+void Camera::setCameraFront(glm::vec3& camFront)
+{
+	cameraFront = camFront;
+}

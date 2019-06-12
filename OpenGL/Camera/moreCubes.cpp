@@ -16,6 +16,16 @@ const int VERSION_MINOR = 3;
 const int VERSION_MAJOR = 3;
 
 bool keys[1024];
+bool firstMouse;
+GLfloat lastX = 400;
+GLfloat lastY = 300;
+GLfloat pitch = 0;
+GLfloat yaw = 0;
+glm::vec3 camFront;
+GLfloat fov = 60.0f;
+const GLfloat FOV_MAX = 60.0f;
+const GLfloat FOV_MIN = 1.0f;
+
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -36,24 +46,79 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 }
 
+void mouse_callback(GLFWwindow* window, double posX, double posY)
+{
+	if (firstMouse)
+	{
+		lastX = posX;
+		lastY = posY;
+		firstMouse = false;
+	}
+	GLfloat xoffset = posX - lastX;
+	GLfloat yoffset = posY - lastY;
+	lastX = posX;
+	lastY = posY;
+
+	GLfloat sensitivity = 0.05;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	if(pitch > 89)
+	{
+		pitch = 89;
+	}
+	if (pitch < -89)
+	{
+		pitch = -89;
+	}
+
+	glm::vec3 front;
+	front.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
+	front.y = glm::sin(glm::radians(pitch));
+	front.z = glm::cos(glm::radians(pitch)) * glm::sin(glm::radians(yaw));
+	camFront = glm::normalize(front);
+
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+
+	if (fov < FOV_MIN)
+	{
+		fov = FOV_MIN;
+	}
+	else if (fov > FOV_MAX)
+	{
+		fov = FOV_MAX;
+	}
+	else
+	{
+		fov -= yoffset;
+	}
+	
+}
+
 void move(Camera& camera, GLfloat& deltaTime)
 {
 	GLfloat speed = 1.0f * deltaTime;
 	if (keys[GLFW_KEY_W])
 	{
-		camera.up(1.0f);
+		camera.up(speed);
 	}
 	if (keys[GLFW_KEY_S])
 	{
-		camera.down(1.0f);
+		camera.down(speed);
 	}
 	if (keys[GLFW_KEY_A])
 	{
-		camera.left(1.0f);
+		camera.left(speed);
 	}
 	if (keys[GLFW_KEY_D])
 	{
-		camera.right(1.0f);
+		camera.right(speed);
 	}
 }
 
@@ -88,6 +153,10 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetScrollCallback(window, scroll_callback);
+
 	glewExperimental = GL_TRUE;
 	glEnable(GL_DEPTH_TEST);
 	if (GLEW_OK != glewInit())
@@ -213,12 +282,13 @@ int main()
 		glUniformMatrix4fv(tranLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 
+		camera.setCameraFront(camFront);
 		glm::mat4 view = camera.view();
 		GLuint viewLoc = glGetUniformLocation(shader.Program, "view");
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
 		glm::mat4 projection(1.0f);
-		projection = glm::perspective(glm::radians(60.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.01f, 1000.0f);
+		projection = glm::perspective(glm::radians(fov), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.01f, 1000.0f);
 		GLuint projectionLoc = glGetUniformLocation(shader.Program, "projection");
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 		glBindVertexArray(0);

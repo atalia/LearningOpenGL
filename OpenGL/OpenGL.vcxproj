@@ -73,7 +73,7 @@
     <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;D:\CG\OpenGL\include\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;D:\CG\OpenGL\include\glm;$(IncludePath)</IncludePath>
+    <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;E:\LearningOpenGL\include\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>D:\OpenCV\build\include;D:\OpenCV\build\include\opencv2;D:\CG\OpenGL\include\glm;$(IncludePath)</IncludePath>
