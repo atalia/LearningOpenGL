@@ -19,13 +19,8 @@ bool keys[1024];
 bool firstMouse;
 GLfloat lastX = 400;
 GLfloat lastY = 300;
-GLfloat pitch = 0;
-GLfloat yaw = 0;
-glm::vec3 camFront;
-GLfloat fov = 60.0f;
-const GLfloat FOV_MAX = 60.0f;
-const GLfloat FOV_MIN = 1.0f;
 
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -59,67 +54,28 @@ void mouse_callback(GLFWwindow* window, double posX, double posY)
 	lastX = posX;
 	lastY = posY;
 
-	GLfloat sensitivity = 0.05;
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
+	camera.processMouseMovement(xoffset, yoffset);
 
-	yaw += xoffset;
-	pitch += yoffset;
-
-	if(pitch > 89)
-	{
-		pitch = 89;
-	}
-	if (pitch < -89)
-	{
-		pitch = -89;
-	}
-
-	glm::vec3 front;
-	front.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
-	front.y = glm::sin(glm::radians(pitch));
-	front.z = glm::cos(glm::radians(pitch)) * glm::sin(glm::radians(yaw));
-	camFront = glm::normalize(front);
 
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 
-	if (fov < FOV_MIN)
-	{
-		fov = FOV_MIN;
-	}
-	else if (fov > FOV_MAX)
-	{
-		fov = FOV_MAX;
-	}
-	else
-	{
-		fov -= yoffset;
-	}
+	camera.processMouseScroll(yoffset);
 	
 }
 
 void move(Camera& camera, GLfloat& deltaTime)
 {
-	GLfloat speed = 1.0f * deltaTime;
 	if (keys[GLFW_KEY_W])
-	{
-		camera.up(speed);
-	}
+		camera.processKeyboard(FORWARD, deltaTime);
 	if (keys[GLFW_KEY_S])
-	{
-		camera.down(speed);
-	}
+		camera.processKeyboard(BACKWARD, deltaTime);
 	if (keys[GLFW_KEY_A])
-	{
-		camera.left(speed);
-	}
+		camera.processKeyboard(LEFT, deltaTime);
 	if (keys[GLFW_KEY_D])
-	{
-		camera.right(speed);
-	}
+		camera.processKeyboard(RIGHT, deltaTime);
 }
 
 void matrixShow(glm::mat4& matrix)
@@ -263,7 +219,6 @@ int main()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sz.width, sz.height, 0, GL_BGR, GL_UNSIGNED_BYTE, image.ptr());
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
@@ -282,13 +237,12 @@ int main()
 		glUniformMatrix4fv(tranLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 
-		camera.setCameraFront(camFront);
-		glm::mat4 view = camera.view();
+		glm::mat4 view = camera.getView();
 		GLuint viewLoc = glGetUniformLocation(shader.Program, "view");
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
 		glm::mat4 projection(1.0f);
-		projection = glm::perspective(glm::radians(fov), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.01f, 1000.0f);
+		projection = glm::perspective(camera.getZoom(), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.01f, 1000.0f);
 		GLuint projectionLoc = glGetUniformLocation(shader.Program, "projection");
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 		glBindVertexArray(0);
