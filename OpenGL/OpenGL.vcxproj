@@ -140,18 +140,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Camera\shader.frag" />
-    <None Include="Camera\shader.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera\Camera.cpp" />
-    <ClCompile Include="Camera\moreCubes.cpp" />
-    <ClCompile Include="Camera\shader.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Camera\Camera.h" />
-    <ClInclude Include="Camera\shader.h" />
+    <ClCompile Include="Colors\Colors.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
