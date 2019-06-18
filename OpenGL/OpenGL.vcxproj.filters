@@ -12,10 +12,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Colors\shader.frag">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="Colors\shader.vert">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Colors\Colors.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Colors\shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Colors\shader.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

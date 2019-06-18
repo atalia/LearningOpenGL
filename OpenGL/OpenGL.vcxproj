@@ -140,10 +140,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="Colors\shader.frag" />
+    <None Include="Colors\shader.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Colors\Colors.cpp" />
+    <ClCompile Include="Colors\shader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Colors\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
