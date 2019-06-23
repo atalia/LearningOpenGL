@@ -26,9 +26,15 @@
     <ClCompile Include="Colors\shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Colors\Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colors\shader.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Colors\Camera.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>

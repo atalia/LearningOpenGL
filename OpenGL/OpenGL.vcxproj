@@ -145,10 +145,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Colors\Camera.cpp" />
     <ClCompile Include="Colors\Colors.cpp" />
     <ClCompile Include="Colors\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Colors\Camera.h" />
     <ClInclude Include="Colors\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
