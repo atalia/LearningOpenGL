@@ -111,6 +111,7 @@ int main()
 	GLuint VBO, containVAO;
 	glGenVertexArrays(1, &containVAO);
 	glGenBuffers(1, &VBO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
@@ -146,6 +147,9 @@ int main()
 		
 		GLint objectColorLoc = glGetUniformLocation(containShader.Program, "objectColor");
 		GLint lightColorLoc = glGetUniformLocation(containShader.Program, "lightColor");
+
+		//std::cout << objectColorLoc << std::endl;
+		//std::cout << lightColorLoc << std::endl;
 		glUniform3f(objectColorLoc, 1.0f, 0.5f, 0.31f);
 		glUniform3f(lightColorLoc, 1.0f, 0.5f, 1.0f);
 
@@ -154,8 +158,11 @@ int main()
 
 		glm::mat4 projection = glm::perspective(glm::radians(60.0f), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
 		GLuint modelLoc = glGetUniformLocation(containShader.Program, "model");
+		//std::cout << modelLoc << std::endl;
 		GLuint viewLoc = glGetUniformLocation(containShader.Program, "view");
+		//std::cout << viewLoc << std::endl;
 		GLuint projectionLoc = glGetUniformLocation(containShader.Program, "projection");
+		//std::cout<<projectionLoc <<std::endl;
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -165,7 +172,7 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 		
-
+		/*
 		lightShader.Use();
 
 
@@ -188,7 +195,7 @@ int main()
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
-
+		*/
 		glfwSwapBuffers(window);
 	}
 	glDeleteBuffers(1, &VBO);
