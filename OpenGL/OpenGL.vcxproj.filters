@@ -12,29 +12,35 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Colors\shader.frag">
+    <None Include="Basic Lighting\lamp.frag">
       <Filter>源文件</Filter>
     </None>
-    <None Include="Colors\shader.vert">
+    <None Include="Basic Lighting\lamp.vert">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="Basic Lighting\shader.frag">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="Basic Lighting\shader.vert">
       <Filter>源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Colors\Colors.cpp">
+    <ClCompile Include="Basic Lighting\Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Colors\shader.cpp">
+    <ClCompile Include="Basic Lighting\Colors.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Colors\Camera.cpp">
+    <ClCompile Include="Basic Lighting\shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Colors\shader.h">
+    <ClInclude Include="Basic Lighting\Camera.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="Colors\Camera.h">
+    <ClInclude Include="Basic Lighting\shader.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
