@@ -18,18 +18,18 @@ void main()
 	
 	//漫反射光照
 	vec3 norm = normalize(Normal);
-	vec3 lightDir = normalize(fragPos - lightPos);
-	float diff = max(-1.0f * dot(norm, lightDir), 0.0f);
+	vec3 lightDir = normalize(lightPos - fragPos);
+	float diff = max(dot(norm, lightDir), 0.0f);
 	vec3 diffuse = diff * lightColor;
 
 	//镜面光照
 	float specularStrength = 0.5f;
 	vec3 viewDir = normalize(viewPos - fragPos);
-	vec3 reflectDir = reflect(lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 256);
+	vec3 reflectDir = reflect(-lightDir, norm);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 2);
 	vec3 specular = specularStrength * spec * lightColor;
 
-	//vec3 result = (ambient + diffuse + specular) * objectColor;
-    vec3 result = specular * objectColor;
+	vec3 result = (ambient + diffuse + specular) * objectColor;
+    //vec3 result = specular * objectColor;
 	color = vec4(result, 1.0f);
 }

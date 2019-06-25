@@ -236,9 +236,6 @@ int main()
 		GLuint projectionLoc = glGetUniformLocation(containShader.Program, "projection");
 		
 
-		
-		
-
 		glm::mat4 model = glm::mat4(1.0f);
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
