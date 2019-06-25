@@ -1,4 +1,4 @@
-#pragma comment(lib, "openGL32.lib")
+﻿#pragma comment(lib, "openGL32.lib")
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -13,7 +13,7 @@ const int SCR_HEIGHT = 600;
 const int VERSION_MINOR = 3;
 const int VERSION_MAJOR = 3;
 
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f); //��һ���Ƶ�λ�ã�Ϊ����������͹�Դ������Դ��shader�������shader���ֿ�
+glm::vec3 lightPosOri(1.2f, 1.0f, 2.0f); //加一个灯的位置，为了区分物体和光源，将光源的shader和物体的shader区分开
 
 bool keys[1024];
 
@@ -122,8 +122,8 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	
 
-	Shader lightShader = Shader("./Basic Lighting/lamp.vert", "./Basic Lighting/lamp.frag");
-	Shader containShader = Shader("./Basic Lighting/shader.vert", "./Basic Lighting/shader.frag");
+	Shader lightShader = Shader("./Materials/lamp.vert", "./Materials/lamp.frag");
+	Shader containShader = Shader("./Materials/shader.vert", "./Materials/shader.frag");
 
 	GLfloat vertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -204,31 +204,49 @@ int main()
 	{
 		glfwPollEvents();
 		
-
-		
 		GLfloat currentTime = (GLfloat)glfwGetTime();
 		GLfloat deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
 		move(camera, deltaTime);
+		float deltaPos = sin(currentTime);
+		//std::cout << deltaPos << std::endl;
+		glm::vec3 lightPos = glm::vec3(lightPosOri.x + deltaPos, lightPosOri.y + deltaPos, lightPosOri.z);
 
-		lightPos += (sin(deltaTime), sin(deltaTime), sin(deltaTime));
+		//std::cout << lightPos.x <<", " <<lightPos.y << ", " <<lightPos.z << std::endl;
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 		containShader.Use();
 		
-		GLuint lightFragPosLoc = glGetUniformLocation(containShader.Program, "lightPos");
-		GLuint lightColorLoc = glGetUniformLocation(containShader.Program, "lightColor");
 		GLuint viewPosLoc = glGetUniformLocation(containShader.Program, "viewPos");
 		GLuint matAmbientLoc = glGetUniformLocation(containShader.Program, "material.ambient");
-		GLuint matAmbientLoc = glGetUniformLocation(containShader.Program, "material.diffuse");
-		GLuint matAmbientLoc = glGetUniformLocation(containShader.Program, "material.specular");
-		GLuint matAmbientLoc = glGetUniformLocation(containShader.Program, "material.shininess");
+		GLuint matDiffLoc = glGetUniformLocation(containShader.Program, "material.diffuse");
+		GLuint matSpecLoc = glGetUniformLocation(containShader.Program, "material.specular");
+		GLuint matShineLoc = glGetUniformLocation(containShader.Program, "material.shininess");
+		GLuint lightPosLoc = glGetUniformLocation(containShader.Program, "light.position");
+		GLuint lightAmbientLoc = glGetUniformLocation(containShader.Program, "light.ambient");
+		GLuint lightDiffLoc = glGetUniformLocation(containShader.Program, "light.diffuse");
+		GLuint lightSpecLoc = glGetUniformLocation(containShader.Program, "light.specular");
 
+		
+		//材质的属性
+		glUniform3f(matAmbientLoc, 1.0f, 0.5f, 0.31f);//材质的环境光
+		glUniform3f(matDiffLoc, 1.0f, 0.5f, 0.31f);//材质的漫反射
+		glUniform3f(matSpecLoc, 0.5f, 0.5f, 0.5f);//材质的镜面反射
+		glUniform1f(matShineLoc, 32.0f);
+		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
+		
 
-		glUniform3f(lightFragPosLoc, lightPos.x, lightPos.y, lightPos.z);
-		glUniform3f(lightColorLoc, 1.0f, 1.0f, 1.0f);
+		//光的属性
+		glm::vec3 lightColor = glm::vec3(sin(currentTime * 2.0f), sin(currentTime * 0.7f), sin(currentTime * 1.3));
+		glm::vec3 diffColor = lightColor * glm::vec3(0.5f);
+		glm::vec3 ambientColor = diffColor * glm::vec3(0.2f);
+
+		//std::cout << (ambientColor.x, ambientColor.y, ambientColor.z) << std::endl;
+		glUniform3f(lightAmbientLoc, ambientColor.x, ambientColor.y, ambientColor.z);//光源环境光
+		glUniform3f(lightDiffLoc, diffColor.x, diffColor.y, diffColor.z);//光源漫反射
+		glUniform3f(lightSpecLoc, 1.0f, 1.0f, 1.0f);//光源镜面反射
 		glUniform3f(viewPosLoc, camera.getCameraPos().x, camera.getCameraPos().y, camera.getCameraPos().z);
 
 		glm::mat4 projection = glm::perspective(camera.getZoom(), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
@@ -259,7 +277,7 @@ int main()
 		projectionLoc = glGetUniformLocation(lightShader.Program, "projection");
 		
 		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.1f));
+		model = glm::scale(model, glm::vec3(0.01f));
 		
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
