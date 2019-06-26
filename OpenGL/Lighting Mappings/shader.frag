@@ -2,7 +2,7 @@
 
 in vec3 Normal;
 in vec3 fragPos;
-
+in vec2 TexCoords;
 
 out vec4 color;
 
@@ -10,8 +10,7 @@ uniform vec3 viewPos;
 
 struct Material
 {
-	simpler2D ambient;
-	vec3 diffuse;
+	sampler2D diffuse;
 	vec3 specular;
 	float shininess;
 };
@@ -31,13 +30,13 @@ uniform Light light;
 void main()
 {
 	//环境光
-	vec3 ambient = material.ambient * light.ambient;
+	vec3 ambient = vec3(texture(material.diffuse, TexCoords)) * light.ambient;
 	
 	//漫反射光照
 	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(light.position - fragPos);
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuse = diff * material.diffuse * light.diffuse;
+	vec3 diffuse = diff * vec3(texture(material.diffuse, TexCoords))* light.diffuse;
 
 	//镜面光照
 	vec3 viewDir = normalize(viewPos - fragPos);

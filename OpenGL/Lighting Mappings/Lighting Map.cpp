@@ -7,6 +7,7 @@
 #include <iostream>
 #include "Camera.h"
 #include "shader.h"
+#include <opencv2/highgui/highgui.hpp>
 
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;
@@ -186,6 +187,7 @@ int main()
 	glEnableVertexAttribArray(1);
 
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
 	glBindVertexArray(0);
 
 	//LIGHT
@@ -193,13 +195,38 @@ int main()
 	glGenVertexArrays(1, &lightVAO);
 	glBindVertexArray(lightVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 
 	//Content End
 	
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	cv::Mat image = cv::imread("./Lighting Mappings/container.png", 1);//0 为灰度加载，1为BGR加载
+	if (image.empty())
+	{
+		std::cout << "Texture picture is empty" << std::endl;
+		system("pause");
+		return -1;
+	}
+	cv::Size sz = image.size();
+	cv::flip(image, image, 0);
+	cv::imshow("image", image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sz.width, sz.height, 0, GL_BGR, GL_UNSIGNED_BYTE, image.ptr());
+	//std::cout << sz.height << sz.height << std::endl;
+	image.release();
+	glBindTexture(GL_TEXTURE_2D, 0);
 	
 
 	GLfloat lastTime = 0.0f;
@@ -221,10 +248,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 		containShader.Use();
-		
+		glUniform1i(glGetUniformLocation(containShader.Program, "material.diffuse"), 0);
 		GLuint viewPosLoc = glGetUniformLocation(containShader.Program, "viewPos");
-		GLuint matAmbientLoc = glGetUniformLocation(containShader.Program, "material.ambient");
-		GLuint matDiffLoc = glGetUniformLocation(containShader.Program, "material.diffuse");
 		GLuint matSpecLoc = glGetUniformLocation(containShader.Program, "material.specular");
 		GLuint matShineLoc = glGetUniformLocation(containShader.Program, "material.shininess");
 		GLuint lightPosLoc = glGetUniformLocation(containShader.Program, "light.position");
@@ -234,15 +259,16 @@ int main()
 
 		
 		//材质的属性
-		glUniform3f(matAmbientLoc, 1.0f, 0.5f, 0.31f);//材质的环境光
-		glUniform3f(matDiffLoc, 1.0f, 0.5f, 0.31f);//材质的漫反射
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
 		glUniform3f(matSpecLoc, 0.5f, 0.5f, 0.5f);//材质的镜面反射
 		glUniform1f(matShineLoc, 32.0f);
 		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
 		
 
 		//光的属性
-		glm::vec3 lightColor = glm::vec3(sin(currentTime * 2.0f), sin(currentTime * 0.7f), sin(currentTime * 1.3));
+		//glm::vec3 lightColor = glm::vec3(sin(currentTime * 2.0f), sin(currentTime * 0.7f), sin(currentTime * 1.3));
+		glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec3 diffColor = lightColor * glm::vec3(0.5f);
 		glm::vec3 ambientColor = diffColor * glm::vec3(0.2f);
 
