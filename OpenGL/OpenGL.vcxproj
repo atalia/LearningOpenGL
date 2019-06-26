@@ -140,20 +140,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Materials\lamp.frag" />
-    <None Include="Materials\lamp.vert" />
-    <None Include="Materials\shader.frag" />
-    <None Include="Materials\shader.vert" />
+    <None Include="Lighting Mappings\lamp.frag" />
+    <None Include="Lighting Mappings\lamp.vert" />
+    <None Include="Lighting Mappings\shader.frag" />
+    <None Include="Lighting Mappings\shader.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Materials\Camera.cpp" />
-    <ClCompile Include="Materials\Materials.cpp" />
-    <ClCompile Include="Materials\shader.cpp" />
+    <ClCompile Include="Lighting Mappings\Camera.cpp" />
+    <ClCompile Include="Lighting Mappings\Lighting Map.cpp" />
+    <ClCompile Include="Lighting Mappings\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Materials\Camera.h" />
-    <ClInclude Include="Materials\shader.h" />
+    <ClInclude Include="Lighting Mappings\Camera.h" />
+    <ClInclude Include="Lighting Mappings\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
