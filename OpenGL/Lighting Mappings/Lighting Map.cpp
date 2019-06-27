@@ -252,6 +252,29 @@ int main()
 	image.release();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	GLuint ambient;
+	glGenTextures(1, &ambient);
+	glBindTexture(GL_TEXTURE_2D, ambient);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	image = cv::imread("./Lighting Mappings/matrix.jpg", 1);
+	if (image.empty())
+	{
+		std::cout << "Texture picture is empty" << std::endl;
+		system("pause");
+		return -1;
+	}
+	sz = image.size();
+	cv::flip(image, image, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sz.width, sz.height, 0, GL_BGR, GL_UNSIGNED_BYTE, image.ptr());
+	image.release();
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 
 	GLfloat lastTime = 0.0f;
@@ -293,6 +316,11 @@ int main()
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specular);
 		glUniform1i(glGetUniformLocation(containShader.Program, "material.specular"), 1);
+		
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, ambient);
+		glUniform1i(glGetUniformLocation(containShader.Program, "material.ambient"), 2);
+		
 		//光的属性
 		//glm::vec3 lightColor = glm::vec3(sin(currentTime * 2.0f), sin(currentTime * 0.7f), sin(currentTime * 1.3));
 		glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);

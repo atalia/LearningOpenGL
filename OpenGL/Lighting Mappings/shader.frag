@@ -10,6 +10,7 @@ uniform vec3 viewPos;
 
 struct Material
 {
+	sampler2D ambient;
 	sampler2D diffuse;
 	sampler2D specular;
 	float shininess;
@@ -30,7 +31,7 @@ uniform Light light;
 void main()
 {
 	//环境光
-	vec3 ambient = vec3(texture(material.diffuse, TexCoords)) * light.ambient;
+	vec3 ambient = vec3(texture(material.ambient, TexCoords));
 	
 	//漫反射光照
 	vec3 norm = normalize(Normal);
