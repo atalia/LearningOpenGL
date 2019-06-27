@@ -99,7 +99,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Colors", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Lighting Maps", NULL, NULL);
 	if (window == NULL)
 	{
 		glfwTerminate();
@@ -201,9 +201,9 @@ int main()
 
 	//Content End
 	
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	GLuint diffuse;
+	glGenTextures(1, &diffuse);
+	glBindTexture(GL_TEXTURE_2D, diffuse);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -213,7 +213,7 @@ int main()
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	cv::Mat image = cv::imread("./Lighting Mappings/container.png", 1);//0 为灰度加载，1为BGR加载
+	cv::Mat image = cv::imread("./Lighting Mappings/container_diffuse.png", 1);//0 为灰度加载，1为BGR加载
 	if (image.empty())
 	{
 		std::cout << "Texture picture is empty" << std::endl;
@@ -222,12 +222,37 @@ int main()
 	}
 	cv::Size sz = image.size();
 	cv::flip(image, image, 0);
-	cv::imshow("image", image);
+	//cv::imshow("image", image);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sz.width, sz.height, 0, GL_BGR, GL_UNSIGNED_BYTE, image.ptr());
 	//std::cout << sz.height << sz.height << std::endl;
 	image.release();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
+	GLuint specular;
+	glGenTextures(1, &specular);
+	glBindTexture(GL_TEXTURE_2D, specular);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	image = cv::imread("./Lighting Mappings/container_specular.png", 1);
+	if (image.empty())
+	{
+		std::cout<<"Texture picture is empty" << std::endl;
+		system("pause");
+		return -1;
+	}
+	sz = image.size();
+	cv::flip(image, image, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sz.width, sz.height, 0, GL_BGR, GL_UNSIGNED_BYTE, image.ptr());
+	image.release();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+
 
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
@@ -248,9 +273,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 		containShader.Use();
-		glUniform1i(glGetUniformLocation(containShader.Program, "material.diffuse"), 0);
+		
 		GLuint viewPosLoc = glGetUniformLocation(containShader.Program, "viewPos");
-		GLuint matSpecLoc = glGetUniformLocation(containShader.Program, "material.specular");
 		GLuint matShineLoc = glGetUniformLocation(containShader.Program, "material.shininess");
 		GLuint lightPosLoc = glGetUniformLocation(containShader.Program, "light.position");
 		GLuint lightAmbientLoc = glGetUniformLocation(containShader.Program, "light.ambient");
@@ -260,12 +284,15 @@ int main()
 		
 		//材质的属性
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glUniform3f(matSpecLoc, 0.5f, 0.5f, 0.5f);//材质的镜面反射
+		glBindTexture(GL_TEXTURE_2D, diffuse);
+		glUniform1i(glGetUniformLocation(containShader.Program, "material.diffuse"), 0);
+
 		glUniform1f(matShineLoc, 32.0f);
 		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
 		
-
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specular);
+		glUniform1i(glGetUniformLocation(containShader.Program, "material.specular"), 1);
 		//光的属性
 		//glm::vec3 lightColor = glm::vec3(sin(currentTime * 2.0f), sin(currentTime * 0.7f), sin(currentTime * 1.3));
 		glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
