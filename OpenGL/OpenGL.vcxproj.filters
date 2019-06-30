@@ -1,47 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Lighting Mappings\lamp.frag">
-      <Filter>源文件</Filter>
+    <None Include="Light casters\lamp.frag">
+      <Filter>Sources</Filter>
     </None>
-    <None Include="Lighting Mappings\lamp.vert">
-      <Filter>源文件</Filter>
+    <None Include="Light casters\lamp.vert">
+      <Filter>Sources</Filter>
     </None>
-    <None Include="Lighting Mappings\shader.frag">
-      <Filter>源文件</Filter>
+    <None Include="Light casters\shader.frag">
+      <Filter>Sources</Filter>
     </None>
-    <None Include="Lighting Mappings\shader.vert">
-      <Filter>源文件</Filter>
+    <None Include="Light casters\shader.vert">
+      <Filter>Sources</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lighting Mappings\Camera.cpp">
-      <Filter>源文件</Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{9d1fcd36-6640-4f4c-9183-7868a91b238a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Light casters\Camera.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Lighting Mappings\shader.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="Light casters\shader.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Lighting Mappings\Lighting Map.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="Light casters\Light casters.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Lighting Mappings\Camera.h">
-      <Filter>源文件</Filter>
+    <ClInclude Include="Light casters\Camera.h">
+      <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Lighting Mappings\shader.h">
-      <Filter>源文件</Filter>
+    <ClInclude Include="Light casters\shader.h">
+      <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
