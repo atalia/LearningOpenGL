@@ -51,6 +51,7 @@ public:
 
 	glm::vec3 getCameraPos();
 
+	glm::vec3 getCameraFront();
 	void processKeyboard(Camera_Movement , GLfloat);
 	void processMouseMovement(GLfloat, GLfloat, GLboolean constrainPitch = true);
 	void processMouseScroll(GLfloat);

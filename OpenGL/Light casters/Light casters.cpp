@@ -8,11 +8,15 @@
 #include "Camera.h"
 #include "shader.h"
 #include <opencv2/highgui/highgui.hpp>
+#include <sstream>
+#include <string>
+
 
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;
 const int VERSION_MINOR = 3;
 const int VERSION_MAJOR = 3;
+const int NR_POINT_LIGHTS = 4;
 
 glm::vec3 lightPosOri(1.2f, 1.0f, 2.0f); //加一个灯的位置，为了区分物体和光源，将光源的shader和物体的shader区分开
 
@@ -22,7 +26,7 @@ bool firstMouse = true;
 GLfloat lastX = 400;
 GLfloat lastY = 300;
 
-Camera camera(glm::vec3(1.0f, 1.0f, 4.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));
 
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -186,6 +190,15 @@ int main()
 	glm::vec3(1.5f,  0.2f, -1.5f),
 	glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
+
+	glm::vec3 pointLightPosition[] = {
+		glm::vec3(0.7f,  0.2f,  2.0f),
+		glm::vec3(2.3f, -3.3f, -4.0f),
+		glm::vec3(-4.0f,  2.0f, -12.0f),
+		glm::vec3(0.0f,  0.0f, -3.0f)
+
+	};
+
 	//CUBE
 	GLuint VBO, containVAO;
 	glGenVertexArrays(1, &containVAO);
@@ -291,45 +304,61 @@ int main()
 		containShader.Use();
 		
 		//不需要改
-		GLuint viewPosLoc = glGetUniformLocation(containShader.Program, "viewPos");
-		GLuint matShineLoc = glGetUniformLocation(containShader.Program, "material.shininess");
 
-		/*
+		
 		//定向光
-		//GLuint lightPosLoc = glGetUniformLocation(containShader.Program, "light.position");
-		GLuint lightPosLoc = glGetUniformLocation(containShader.Program, "directlight.direction");
-		GLuint lightAmbientLoc = glGetUniformLocation(containShader.Program, "directlight.ambient");
-		GLuint lightDiffLoc = glGetUniformLocation(containShader.Program, "directlight.diffuse");
-		GLuint lightSpecLoc = glGetUniformLocation(containShader.Program, "directlight.specular");
-		*/
-		/*
+		glUniform3f(glGetUniformLocation(containShader.Program, "directlight.direction"), -0.2f, -1.0f, -0.3f);
+		
+		glUniform3f(glGetUniformLocation(containShader.Program, "directlight.ambient"), 0.05f, 0.05f, 0.05f);
+		glUniform3f(glGetUniformLocation(containShader.Program, "directlight.diffuse"), 0.4f, 0.4f, 0.4f) ;
+		glUniform3f(glGetUniformLocation(containShader.Program, "directlight.specular"), 0.5f, 0.5f, 0.5f);
+		
+		
 		//点光源
-		GLuint lightPosLoc = glGetUniformLocation(containShader.Program, "pointlight.position");
-		GLuint lightAmbientLoc = glGetUniformLocation(containShader.Program, "pointlight.ambient");
-		GLuint lightDiffLoc = glGetUniformLocation(containShader.Program, "pointlight.diffuse");
-		GLuint lightSpecLoc = glGetUniformLocation(containShader.Program, "pointlight.specular");
+		for (int i = 0; i < NR_POINT_LIGHTS; ++i)
+		{
+			std::stringstream ss;
+			ss << "pointlights[";
+			ss << i;
+			ss << "]";
+			std::string pointlight = ss.str();
+			//std::cout << pointlight << std::endl;
+			glUniform3f(glGetUniformLocation(containShader.Program, (pointlight + std::string(".position")).c_str()), pointLightPosition[i].x, pointLightPosition[i].y, pointLightPosition[i].z);
 
-		glUniform1f(glGetUniformLocation(containShader.Program, "pointlight.constant"), 1.0f);
-		glUniform1f(glGetUniformLocation(containShader.Program, "pointlight.linear"), 0.09f);
-		glUniform1f(glGetUniformLocation(containShader.Program, "pointlight.quadratic"), 0.032f);
-		*/
-		GLuint lightPosLoc = glGetUniformLocation(containShader.Program, "spotlight.position");
-		lightPos = glm::vec3(0.0f, 0.0f, 5.0f);
-		GLuint lightAmbientLoc = glGetUniformLocation(containShader.Program, "spotlight.ambient");
-		GLuint lightDiffLoc = glGetUniformLocation(containShader.Program, "spotlight.diffuse");
-		GLuint lightSpecLoc = glGetUniformLocation(containShader.Program, "spotlight.specular");
-		glUniform1f(glGetUniformLocation(containShader.Program, "spotlight.innerCutOff"), 0.91f);
-		glUniform1f(glGetUniformLocation(containShader.Program, "spotlight.outCutOff"), 0.82f);
-		glUniform3f(glGetUniformLocation(containShader.Program, "spotlight.direction"), 0.0f, 0.0f, -1.0f);
+			glUniform3f(glGetUniformLocation(containShader.Program, (pointlight + std::string(".ambient")).c_str()), 0.05f, 0.05f, 0.05f);
+			glUniform3f(glGetUniformLocation(containShader.Program, (pointlight + std::string(".diffuse")).c_str()), 0.8f, 0.8f, 0.8f);
+			glUniform3f(glGetUniformLocation(containShader.Program, (pointlight + std::string(".specular")).c_str()), 1.0f, 1.0f, 1.0f);
 
+			glUniform1f(glGetUniformLocation(containShader.Program, (pointlight + std::string(".constant")).c_str()), 1.0f);
+			glUniform1f(glGetUniformLocation(containShader.Program, (pointlight + std::string(".linear")).c_str()), 0.09f);
+			glUniform1f(glGetUniformLocation(containShader.Program, (pointlight + std::string(".quadratic")).c_str()), 0.032f);
+		}
+
+		
+		
+		glUniform3f(glGetUniformLocation(containShader.Program, "spotlight.position"), camera.getCameraPos().x, camera.getCameraPos().y, camera.getCameraPos().z);
+
+		glUniform3f(glGetUniformLocation(containShader.Program, "spotlight.ambient"), 0.0f, 0.0f, 0.0f);
+		glUniform3f(glGetUniformLocation(containShader.Program, "spotlight.diffuse"), 1.0f, 1.0f, 1.0f);
+		glUniform3f(glGetUniformLocation(containShader.Program, "spotlight.specular"), 1.0f, 1.0f, 1.0f);
+
+		glUniform1f(glGetUniformLocation(containShader.Program, "spotlight.innerCutOff"), glm::cos(glm::radians(12.5f)));
+		glUniform1f(glGetUniformLocation(containShader.Program, "spotlight.outCutOff"), glm::cos(glm::radians(30.0f)));
+		glUniform3f(glGetUniformLocation(containShader.Program, "spotlight.direction"), camera.getCameraFront().x, camera.getCameraFront().y, camera.getCameraFront().z);
+
+		glUniform1f(glGetUniformLocation(containShader.Program, "spotlight.constant"), 1.0f);
+		glUniform1f(glGetUniformLocation(containShader.Program, "spotlight.linear"), 0.09f);
+		glUniform1f(glGetUniformLocation(containShader.Program, "spotlight.quadratic"), 0.032f);
+
+		//std::cout << camera.getCameraFront().x << ", "<<camera.getCameraFront().y<<","<<camera.getCameraFront().z << std::endl;
+		
+		
+		//std::cout << camera.getCameraPos().x<<", "<< camera.getCameraPos().y<<", "<< camera.getCameraPos().z << std::endl;
 		//材质的光照贴图
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuse);
 		glUniform1i(glGetUniformLocation(containShader.Program, "material.diffuse"), 0);
-
-		glUniform1f(matShineLoc, 32.0f);
-		glUniform3f(lightPosLoc, lightPos.x, lightPos.y, lightPos.z);
-		
+		glUniform1f(glGetUniformLocation(containShader.Program, "material.shininess"), 32.0f);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specular);
 		glUniform1i(glGetUniformLocation(containShader.Program, "material.specular"), 1);
@@ -343,23 +372,16 @@ int main()
 
 		//std::cout << (ambientColor.x, ambientColor.y, ambientColor.z) << std::endl;
 		//glUniform3f(lightPosLoc, 0.0f, 0.0, -1.0f);
-		glUniform3f(lightAmbientLoc, ambientColor.x, ambientColor.y, ambientColor.z);//光源环境光
-		glUniform3f(lightDiffLoc, diffColor.x, diffColor.y, diffColor.z);//光源漫反射
-		glUniform3f(lightSpecLoc, 1.0f, 1.0f, 1.0f);//光源镜面反射
-		glUniform3f(viewPosLoc, camera.getCameraPos().x, camera.getCameraPos().y, camera.getCameraPos().z);
+
+
+		glUniform3f(glGetUniformLocation(containShader.Program, "viewPos"), camera.getCameraPos().x, camera.getCameraPos().y, camera.getCameraPos().z);
 
 		glm::mat4 projection = glm::perspective(camera.getZoom(), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
 		
-		GLuint modelLoc = glGetUniformLocation(containShader.Program, "model");
 		
-		GLuint viewLoc = glGetUniformLocation(containShader.Program, "view");
 		
-		GLuint projectionLoc = glGetUniformLocation(containShader.Program, "projection");
-		
-
-		
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.getView()));
+		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		
 		glBindVertexArray(containVAO);
 
@@ -371,7 +393,7 @@ int main()
 			model = glm::translate(model, cubePositions[i]);
 			GLfloat angle = 20.0f * i;
 			model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
-			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+			glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 			
 		}
@@ -379,21 +401,22 @@ int main()
 		glBindVertexArray(0);
 		lightShader.Use();
 
-		modelLoc = glGetUniformLocation(lightShader.Program, "model");
-		viewLoc = glGetUniformLocation(lightShader.Program, "view");
-		projectionLoc = glGetUniformLocation(lightShader.Program, "projection");
 		
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.01f));
+		glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.getView()));
+		glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
 		
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(camera.getView()));
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-
 		glBindVertexArray(lightVAO);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (GLuint i = 0; i < NR_POINT_LIGHTS; ++i)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, pointLightPosition[i]);
+			model = glm::scale(model, glm::vec3(1.0f));
+
+			glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 		glBindVertexArray(0);
 	
 		glfwSwapBuffers(window);

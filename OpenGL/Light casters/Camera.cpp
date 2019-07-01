@@ -43,6 +43,11 @@ Camera::~Camera()
 	
 }
 
+glm::vec3 Camera::getCameraFront()
+{
+	return this->cameraFront;
+}
+
 glm::vec3 Camera::getCameraPos()
 {
 	return this->cameraPos;
