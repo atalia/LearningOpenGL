@@ -2,16 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Light casters\lamp.frag">
+    <None Include="Stencil Testing\shader.frag">
       <Filter>Sources</Filter>
     </None>
-    <None Include="Light casters\lamp.vert">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Light casters\shader.frag">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Light casters\shader.vert">
+    <None Include="Stencil Testing\shader.vert">
       <Filter>Sources</Filter>
     </None>
   </ItemGroup>
@@ -21,21 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Light casters\Camera.cpp">
+    <ClCompile Include="Stencil Testing\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Light casters\shader.cpp">
+    <ClCompile Include="Stencil Testing\Stencil Testing.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Light casters\Light casters.cpp">
+    <ClCompile Include="Stencil Testing\Texture.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Stencil Testing\control.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Light casters\Camera.h">
+    <ClInclude Include="Stencil Testing\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Light casters\shader.h">
+    <ClInclude Include="Stencil Testing\shader.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Stencil Testing\control.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

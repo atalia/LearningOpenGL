@@ -140,20 +140,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Light casters\lamp.frag" />
-    <None Include="Light casters\lamp.vert" />
-    <None Include="Light casters\shader.frag" />
-    <None Include="Light casters\shader.vert" />
     <None Include="packages.config" />
+    <None Include="Stencil Testing\shader.frag" />
+    <None Include="Stencil Testing\shader.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Light casters\Camera.cpp" />
-    <ClCompile Include="Light casters\Light casters.cpp" />
-    <ClCompile Include="Light casters\shader.cpp" />
+    <ClCompile Include="Stencil Testing\Camera.cpp" />
+    <ClCompile Include="Stencil Testing\control.cpp" />
+    <ClCompile Include="Stencil Testing\Stencil Testing.cpp" />
+    <ClCompile Include="Stencil Testing\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Light casters\Camera.h" />
-    <ClInclude Include="Light casters\shader.h" />
+    <ClInclude Include="Stencil Testing\Camera.h" />
+    <ClInclude Include="Stencil Testing\control.h" />
+    <ClInclude Include="Stencil Testing\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
