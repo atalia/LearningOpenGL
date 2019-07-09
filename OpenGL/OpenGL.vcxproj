@@ -147,8 +147,9 @@
   <ItemGroup>
     <ClCompile Include="Stencil Testing\Camera.cpp" />
     <ClCompile Include="Stencil Testing\control.cpp" />
+    <ClCompile Include="Stencil Testing\shader.cpp" />
     <ClCompile Include="Stencil Testing\Stencil Testing.cpp" />
-    <ClCompile Include="Stencil Testing\Texture.cpp" />
+    <ClCompile Include="Stencil Testing\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stencil Testing\Camera.h" />

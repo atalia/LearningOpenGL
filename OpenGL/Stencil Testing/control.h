@@ -1,11 +1,11 @@
 #pragma once
 #include "Camera.h"
 
-bool keys[1024];
+static bool keys[1024];
 
-bool firstMouse = true;
-GLfloat lastX = 400;
-GLfloat lastY = 300;
+static bool firstMouse = true;
+static GLfloat lastX = 400;
+static GLfloat lastY = 300;
 
 static Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));//全局唯一的相机
 

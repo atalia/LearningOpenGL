@@ -1,9 +1,10 @@
 /*
 ¼ÓÔØÍ¼Æ¬ÎªTEXTURE
 */
-#include<GL/glew.h>
-#include<opencv2/highgui/highgui.hpp>
-#include<iostream>
+#include <GL/glew.h>
+#include <opencv2/highgui/highgui.hpp>
+#include <iostream>
+#include <string>
 
 GLuint loadTexture(const std::string filepath)
 {

@@ -21,10 +21,13 @@
     <ClCompile Include="Stencil Testing\Stencil Testing.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Stencil Testing\Texture.cpp">
+    <ClCompile Include="Stencil Testing\control.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Stencil Testing\control.cpp">
+    <ClCompile Include="Stencil Testing\shader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Stencil Testing\texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
