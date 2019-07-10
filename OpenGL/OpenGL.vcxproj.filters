@@ -2,10 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Stencil Testing\shader.frag">
+    <None Include="Stencil Testing\singlecolor.frag">
       <Filter>Sources</Filter>
     </None>
-    <None Include="Stencil Testing\shader.vert">
+    <None Include="Stencil Testing\singlecolor.vert">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="Stencil Testing\container.frag">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="Stencil Testing\container.vert">
       <Filter>Sources</Filter>
     </None>
   </ItemGroup>

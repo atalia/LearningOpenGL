@@ -141,8 +141,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Stencil Testing\shader.frag" />
-    <None Include="Stencil Testing\shader.vert" />
+    <None Include="Stencil Testing\container.frag" />
+    <None Include="Stencil Testing\container.vert" />
+    <None Include="Stencil Testing\singlecolor.frag" />
+    <None Include="Stencil Testing\singlecolor.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Stencil Testing\Camera.cpp" />
