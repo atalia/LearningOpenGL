@@ -1,5 +1,5 @@
-/*
-����ͼƬΪTEXTURE
+﻿/*
+加载图片为TEXTURE
 */
 #include <GL/glew.h>
 #include <opencv2/highgui/highgui.hpp>
