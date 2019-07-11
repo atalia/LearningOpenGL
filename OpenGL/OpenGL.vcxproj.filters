@@ -27,9 +27,6 @@
     <ClCompile Include="Stencil Testing\Stencil Testing.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Stencil Testing\control.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Stencil Testing\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -42,9 +39,6 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Stencil Testing\shader.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Stencil Testing\control.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

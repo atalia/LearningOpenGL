@@ -9,7 +9,6 @@
 #include "shader.h"
 #include <opencv2/highgui/highgui.hpp>
 #include <string>
-#include "control.h"
 
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;
@@ -18,6 +17,69 @@ const int VERSION_MAJOR = 3;
 const int NR_POINT_LIGHTS = 4;
 
 extern GLuint loadTexture(const std::string filepath);
+
+bool keys[1024];
+
+bool firstMouse = true;
+GLfloat lastX = 400;
+GLfloat lastY = 300;
+Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));//全局唯一的相机
+
+
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+	if (key > 0 && key < 1024)
+	{
+		if (action == GLFW_PRESS)
+		{
+			keys[key] = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			keys[key] = false;
+		}
+	}
+}
+
+void mouse_callback(GLFWwindow* window, double posX, double posY)
+{
+	//std::cout << posX << "," <<posY << std::endl;
+	if (firstMouse)
+	{
+		lastX = posX;
+		lastY = posY;
+		firstMouse = false;
+	}
+	GLfloat xoffset = posX - lastX;
+	GLfloat yoffset = posY - lastY;
+	lastX = posX;
+	lastY = posY;
+	camera.processMouseMovement(xoffset, yoffset);
+}
+
+void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
+{
+	camera.processMouseScroll(yoffset);
+}
+
+void move(Camera& camera, GLfloat& deltaTime)
+{
+	if (keys[GLFW_KEY_W])
+		camera.processKeyboard(FORWARD, deltaTime);
+	if (keys[GLFW_KEY_S])
+		camera.processKeyboard(BACKWARD, deltaTime);
+	if (keys[GLFW_KEY_A])
+		camera.processKeyboard(LEFT, deltaTime);
+	if (keys[GLFW_KEY_D])
+		camera.processKeyboard(RIGHT, deltaTime);
+}
+
+
 
 void matrixShow(glm::mat4& matrix)
 {
@@ -41,7 +103,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Light Casters", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Stencil Testing", NULL, NULL);
 	if (window == NULL)
 	{
 		glfwTerminate();
@@ -154,19 +216,27 @@ int main()
 	GLuint cubeTexture = loadTexture("./Stencil Testing/pattern4diffuseblack.jpg");
 	GLuint planeTexture = loadTexture("./Stencil Testing/metal.png");
 	//Content End
+	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
-		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
-		
+		//开启depth_test的话，一定要clear buffer，不然一定出错！
+		//glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		GLfloat currentTime = glfwGetTime();
+		GLfloat deltaTime = currentTime - lastTime;
+		lastTime = currentTime;
+		move(camera, deltaTime);
+
 		glm::mat4 model(1.0f);
 		glm::mat4 view = camera.getView();
-		glm::mat4 projection = glm::perspective(camera.getZoom(), float(SCR_WIDTH) / float(SCR_HEIGHT), 0.1f, 100.0f);
-		
-		
+		glm::mat4 projection = glm::perspective(camera.getZoom(), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		//std::cout << camera.getCameraPos().x << ", " << camera.getCameraPos().y << ", " << camera.getCameraPos().z  << std::endl;
+		//std::cout << camera.getCameraFront().x << camera.getCameraFront().y << camera.getCameraFront().z << std::endl;
 		containShader.Use();
-		//singleColorShader.Use();
+		
 
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -182,12 +252,16 @@ int main()
 		
 
 		//画个箱子
+		/*
 		glBindVertexArray(containVAO);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
+
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glBindVertexArray(0);
-		
+		*/
+
+		//singleColorShader.Use();
 		glfwSwapBuffers(window);
 		
 	}
