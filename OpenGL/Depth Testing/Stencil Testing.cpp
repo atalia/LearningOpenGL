@@ -125,12 +125,7 @@ int main()
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-
-	glEnable(GL_STENCIL_TEST);
-	//glStencilFunc(GL_NOTEQUAL, 1, 0xff); //Stencil测试标准：模板值不等于1 pass，否则 reject
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
+	
 
 	Shader containShader("./Stencil Testing/container.vert", "./Stencil Testing/container.frag");
 	Shader singleColorShader("./Stencil Testing/singlecolor.vert", "./Stencil Testing/singlecolor.frag");
@@ -229,15 +224,14 @@ int main()
 		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
 		//开启depth_test的话，一定要clear buffer，不然一定出错！
 		//glClear(GL_COLOR_BUFFER_BIT);
-		
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		GLfloat currentTime = glfwGetTime();
 		GLfloat deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
 		move(camera, deltaTime);
 
-		
+		glm::mat4 model(1.0f);
 		glm::mat4 view = camera.getView();
 		glm::mat4 projection = glm::perspective(camera.getZoom(), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		//std::cout << camera.getCameraPos().x << ", " << camera.getCameraPos().y << ", " << camera.getCameraPos().z  << std::endl;
@@ -249,9 +243,8 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		
-		glStencilMask(0x00);
+		
 		//画一个地板
-		glm::mat4 model(1.0f);
 		glBindVertexArray(planeVAO);
 		glBindTexture(GL_TEXTURE_2D, planeTexture);
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
@@ -259,10 +252,8 @@ int main()
 		glBindVertexArray(0);
 		
 
-		
-		glStencilFunc(GL_ALWAYS, 1, 0xff); //模板值为1是pass，结合上面的glstencilop，如果pass的话，就将模板值replace为这里的ref值1
-		glStencilMask(0XFF);
 		//画个箱子
+		
 		glBindVertexArray(containVAO);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
@@ -278,34 +269,8 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 
-		// 画边框
-		singleColorShader.Use();
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(1.1f, 1.1f, 1.1f));
-		
-		glStencilFunc(GL_NOTEQUAL, 1, 0xFF); //模板值不等于0的话是pass
-		glStencilMask(0x00);//关闭Stencil模板写入
-		glDisable(GL_DEPTH_TEST);//关闭深度测试，使其一直pass
-		
-		glBindVertexArray(containVAO);
-		glBindTexture(GL_TEXTURE_2D, cubeTexture);
-		glUniformMatrix4fv(glGetUniformLocation(singleColorShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
 
-		// 画第二个箱子
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-3, 0, -3));
-		model = glm::scale(model, glm::vec3(1.1f, 1.1f, 1.1f));
-		glBindVertexArray(containVAO);
-		glBindTexture(GL_TEXTURE_2D, cubeTexture);
-		glUniformMatrix4fv(glGetUniformLocation(singleColorShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-		
-		//glStencilMask(0xff);
-		glEnable(GL_DEPTH_TEST);
-		glStencilMask(0xff);//非常重要，这里如果不设置为1的话，stencil buffer就不能clear！！！！
+		//singleColorShader.Use();
 		glfwSwapBuffers(window);
 		
 	}
