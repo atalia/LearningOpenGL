@@ -66,7 +66,7 @@ int main()
 	
 
 	Shader containShader("./Stencil Testing/container.vert", "./Stencil Testing/container.frag");
-	Shader singleColor("./Stencil Testing/singlecolor.vert", "./Stencil Testing/singlecolor.frag");
+	Shader singleColorShader("./Stencil Testing/singlecolor.vert", "./Stencil Testing/singlecolor.frag");
 	GLfloat cubeVertices[] = {
 		// Positions          // Texture Coords
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -131,7 +131,7 @@ int main()
 
 	glBindVertexArray(containVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
@@ -144,7 +144,7 @@ int main()
 
 	glBindVertexArray(planeVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
@@ -158,32 +158,38 @@ int main()
 	{
 		glfwPollEvents();
 		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
 		
 		glm::mat4 model(1.0f);
 		glm::mat4 view = camera.getView();
 		glm::mat4 projection = glm::perspective(camera.getZoom(), float(SCR_WIDTH) / float(SCR_HEIGHT), 0.1f, 100.0f);
-
-		containShader.Use();
 		
-		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		
+		containShader.Use();
+		//singleColorShader.Use();
+
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-		glBindVertexArray(containVAO);
-		//先画个箱子
-		glBindTexture(GL_TEXTURE_2D, cubeTexture);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glBindVertexArray(0);
+		//glUniformMatrix4fv(glGetUniformLocation(singleColorShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		//glUniformMatrix4fv(glGetUniformLocation(singleColorShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		
 		//画一个地板
 		glBindVertexArray(planeVAO);
 		glBindTexture(GL_TEXTURE_2D, planeTexture);
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
+		
+
+		//画个箱子
+		glBindVertexArray(containVAO);
+		glBindTexture(GL_TEXTURE_2D, cubeTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glBindVertexArray(0);
+		
 		glfwSwapBuffers(window);
+		
 	}
 	glDeleteBuffers(1, &cubeVBO);
 	glDeleteBuffers(1, &planeVBO);

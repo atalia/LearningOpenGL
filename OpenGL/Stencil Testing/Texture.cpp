@@ -14,6 +14,8 @@ GLuint loadTexture(const std::string filepath)
 		std::cout << "Texture picture is empty" << std::endl;
 		throw "Texture picture is empty";
 	}
+	//debug用
+	//cv::imshow(filepath, img);
 	cv::Size sz = img.size();
 	cv::flip(img, img, 0);
 	GLuint texture;
