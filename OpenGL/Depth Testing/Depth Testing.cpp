@@ -103,7 +103,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Stencil Testing", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Depth Testing", NULL, NULL);
 	if (window == NULL)
 	{
 		glfwTerminate();
@@ -127,8 +127,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	
 
-	Shader containShader("./Stencil Testing/container.vert", "./Stencil Testing/container.frag");
-	Shader singleColorShader("./Stencil Testing/singlecolor.vert", "./Stencil Testing/singlecolor.frag");
+	Shader containShader("./Depth Testing/container.vert", "./Depth Testing/container.frag");
 
 	GLfloat cubeVertices[] = {
 		// Positions          // Texture Coords
@@ -214,8 +213,6 @@ int main()
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 
-	GLuint cubeTexture = loadTexture("./Stencil Testing/pattern4diffuseblack.jpg");
-	GLuint planeTexture = loadTexture("./Stencil Testing/metal.png");
 	//Content End
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
@@ -234,11 +231,7 @@ int main()
 		glm::mat4 model(1.0f);
 		glm::mat4 view = camera.getView();
 		glm::mat4 projection = glm::perspective(camera.getZoom(), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		//std::cout << camera.getCameraPos().x << ", " << camera.getCameraPos().y << ", " << camera.getCameraPos().z  << std::endl;
-		//std::cout << camera.getCameraFront().x << camera.getCameraFront().y << camera.getCameraFront().z << std::endl;
-		singleColorShader.Use();
-		glUniformMatrix4fv(glGetUniformLocation(singleColorShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(glGetUniformLocation(singleColorShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		
 		containShader.Use();
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -246,7 +239,6 @@ int main()
 		
 		//画一个地板
 		glBindVertexArray(planeVAO);
-		glBindTexture(GL_TEXTURE_2D, planeTexture);
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
@@ -255,7 +247,6 @@ int main()
 		//画个箱子
 		
 		glBindVertexArray(containVAO);
-		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
@@ -264,7 +255,6 @@ int main()
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-3, 0, -3));
 		glBindVertexArray(containVAO);
-		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);

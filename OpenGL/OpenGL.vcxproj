@@ -140,21 +140,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="Depth Testing\container.frag" />
+    <None Include="Depth Testing\container.vert" />
     <None Include="packages.config" />
-    <None Include="Stencil Testing\container.frag" />
-    <None Include="Stencil Testing\container.vert" />
-    <None Include="Stencil Testing\singlecolor.frag" />
-    <None Include="Stencil Testing\singlecolor.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Stencil Testing\Camera.cpp" />
-    <ClCompile Include="Stencil Testing\shader.cpp" />
-    <ClCompile Include="Stencil Testing\Stencil Testing.cpp" />
-    <ClCompile Include="Stencil Testing\texture.cpp" />
+    <ClCompile Include="Depth Testing\Camera.cpp" />
+    <ClCompile Include="Depth Testing\Depth Testing.cpp" />
+    <ClCompile Include="Depth Testing\shader.cpp" />
+    <ClCompile Include="Depth Testing\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Stencil Testing\Camera.h" />
-    <ClInclude Include="Stencil Testing\shader.h" />
+    <ClInclude Include="Depth Testing\Camera.h" />
+    <ClInclude Include="Depth Testing\shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Depth Testing\metal.png" />
+    <Image Include="Depth Testing\pattern4diffuseblack.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
