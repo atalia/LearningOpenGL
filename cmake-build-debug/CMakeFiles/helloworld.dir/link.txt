@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/helloworld.dir/OpenGL/Hello_Window/hellowindow.cpp.o  -o helloworld /usr/local/Cellar/glew/2.1.0/lib/libGLEW.2.1.dylib /usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.dylib 
