@@ -221,6 +221,10 @@ int main()
 
 	GLuint cubeTexture = loadTexture("./Stencil Testing/pattern4diffuseblack.jpg");
 	GLuint planeTexture = loadTexture("./Stencil Testing/metal.png");
+	//scale
+	const GLfloat scale = 1.1f;
+	//
+	const glm::vec3 CubePosition[2] = { glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(2.0f, 0.0f, 0.0f) };
 	//Content End
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
@@ -250,7 +254,7 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		
 		glStencilMask(0x00);
-		//画一个地板
+		// 画地板
 		glm::mat4 model(1.0f);
 		glBindVertexArray(planeVAO);
 		glBindTexture(GL_TEXTURE_2D, planeTexture);
@@ -262,7 +266,9 @@ int main()
 		
 		glStencilFunc(GL_ALWAYS, 1, 0xff); //模板值为1是pass，结合上面的glstencilop，如果pass的话，就将模板值replace为这里的ref值1
 		glStencilMask(0XFF);
-		//画个箱子
+		// 画个箱子
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, CubePosition[0]);
 		glBindVertexArray(containVAO);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
@@ -271,7 +277,7 @@ int main()
 		
 		// 画第二个箱子
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-3, 0, -3));
+		model = glm::translate(model, CubePosition[1]);
 		glBindVertexArray(containVAO);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
@@ -279,13 +285,16 @@ int main()
 		glBindVertexArray(0);
 
 		// 画边框
-		singleColorShader.Use();
-		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(1.1f, 1.1f, 1.1f));
-		
+
 		glStencilFunc(GL_NOTEQUAL, 1, 0xFF); //模板值不等于0的话是pass
 		glStencilMask(0x00);//关闭Stencil模板写入
 		glDisable(GL_DEPTH_TEST);//关闭深度测试，使其一直pass
+		
+		// 第一个箱子
+		singleColorShader.Use();
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, CubePosition[0]);
+		model = glm::scale(model, glm::vec3(scale));
 		
 		glBindVertexArray(containVAO);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
@@ -295,15 +304,14 @@ int main()
 
 		// 画第二个箱子
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-3, 0, -3));
-		model = glm::scale(model, glm::vec3(1.1f, 1.1f, 1.1f));
+		model = glm::translate(model, CubePosition[1]);
+		model = glm::scale(model, glm::vec3(scale));
 		glBindVertexArray(containVAO);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		glUniformMatrix4fv(glGetUniformLocation(singleColorShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 		
-		//glStencilMask(0xff);
 		glEnable(GL_DEPTH_TEST);
 		glStencilMask(0xff);//非常重要，这里如果不设置为1的话，stencil buffer就不能clear！！！！
 		glfwSwapBuffers(window);
