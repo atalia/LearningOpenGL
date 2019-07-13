@@ -59,13 +59,13 @@ glStencilFunc(GL_ALWAYS, 1, 0xFF)//Stencil Test always pass
 5. Stencil Buffer 判断后处理函数
 
 ```c++
-void glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass)\
+void glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass)
 ```
 
 - ```sfail```： 如果模板测试失败将采取的动作。
 - ```dpfail```： 如果模板测试通过，但是深度测试失败时采取的动作。
 - ```dppass```： 如果深度测试和模板测试都通过，将采取的动作。  
-可用参数
+> **可用参数**
 
 |操作|描述|
 |:--:|:--:|
