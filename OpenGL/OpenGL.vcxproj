@@ -140,24 +140,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Blending\container.frag" />
-    <None Include="Blending\container.vert" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Blending\Camera.cpp" />
-    <ClCompile Include="Blending\shader.cpp" />
-    <ClCompile Include="Blending\Blending.cpp" />
-    <ClCompile Include="Blending\Texture.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Blending\Camera.h" />
-    <ClInclude Include="Blending\shader.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Blending\grass.png" />
     <Image Include="Blending\metal.png" />
     <Image Include="Blending\pattern4diffuseblack.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Blending\Blending.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
