@@ -10,6 +10,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <string>
 #include <vector>
+#include <map>
 
 typedef glm::vec3 vec3;
 
@@ -27,7 +28,6 @@ bool firstMouse = true;
 GLfloat lastX = 400;
 GLfloat lastY = 300;
 Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));
-
 
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -83,8 +83,7 @@ void move(Camera& camera, GLfloat& deltaTime)
 }
 
 
-
-void matrixShow(glm::mat4& matrix)
+void matrixShow(const glm::mat4& matrix)
 {
 	std::cout << std::string(10, '-') << std::endl;
 	for (int i = 0; i < matrix.length(); ++i)
@@ -241,7 +240,7 @@ int main()
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 
-	// 植被在空间的位置
+	// window在空间的位置
 	const std::vector<glm::vec3> vegetation = {
 		glm::vec3(-1.5f,  0.0f, -0.48f),
 		glm::vec3(1.5f,  0.0f,  0.51f),
@@ -255,6 +254,7 @@ int main()
 		vec3(-1.0f, 0.0f, -1.0f),
 		vec3(2.0f, 0.0f, 0.0f)
 	};
+
 
 	
 	GLuint cubeTexture = loadTexture("./Blending/pattern4diffuseblack.jpg");
@@ -272,6 +272,8 @@ int main()
 	//glBlendFunc(GL_ZERO, GL_ONE);
 	//glBlendFunc(GL_ONE, GL_ONE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
@@ -303,18 +305,6 @@ int main()
 		glBindVertexArray(0);
 
 		
-		// 画窗户
-		glBindVertexArray(windowVAO);
-		glBindTexture(GL_TEXTURE_2D, windowTexture);
-		for (uint i = 0; i < vegetation.size(); ++i)
-		{
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, vegetation[i]);
-			glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-		glBindVertexArray(0);
-
 		//画箱子
 		glBindVertexArray(containVAO);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
@@ -328,9 +318,26 @@ int main()
 		glBindVertexArray(0);
 
 		
-		
+		// 增加排序
+		std::map<float, glm::vec3> sorted;
+		for (GLuint i = 0; i < vegetation.size(); i++) // windows contains all window positions
+		{
+			GLfloat distance = glm::length(camera.getCameraPos() - vegetation[i]);
+			sorted[distance] = vegetation[i];
+		}
 
-		
+		// 画窗户
+		glBindVertexArray(windowVAO);
+		glBindTexture(GL_TEXTURE_2D, windowTexture);
+		for (std::map<float, vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, it->second);
+			glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		glBindVertexArray(0);
+
 
 		glfwSwapBuffers(window);
 

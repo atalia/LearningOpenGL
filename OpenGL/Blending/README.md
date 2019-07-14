@@ -4,7 +4,7 @@
 
 在OpenGL中，物体透明技术通常被叫做混合(Blending)。透明是物体（或物体的一部分）非纯色而是混合色，这种颜色来自于不同浓度的自身颜色和它后面的物体颜色。一个有色玻璃窗就是一种透明物体，玻璃有自身的颜色，但是最终的颜色包含了所有玻璃后面的颜色。这也正是混合这名称的出处，因为我们将多种（来自于不同物体）颜色混合为一个颜色，透明使得我们可以看穿物体。
 
-## 忽略片段
+## 1. 忽略片段
 
 ### 需求介绍
 
@@ -44,7 +44,7 @@ void main()
 1. 丢弃片段的方式，不能使我们获得渲染半透明图像
 2. 对于全透明物体，比如草叶，我们选择简单的丢弃透明像素而不是混合，这样就减少了令我们头疼的问题（没有深度测试问题）。
 
-## 混合
+## 2. 混合(Blend)
 
 ### 需求分析
 
@@ -108,7 +108,7 @@ void glBlendColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha)
 
 *For Example*
 
-``` c++
+```c++
 glBlendFuncSeperate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,GL_ONE, GL_ZERO) //源ALPHA影响最终的RGB,且最终的alpha元素为源ALPHA
 ```
 
@@ -120,6 +120,7 @@ void glBlendEquation(GLenum mode)
 ```
 
 #### **```mode```可选项**
+
 |**```mode```**|**作用**|
 |:-:|:-:|
 |GL_FUNC_ADD|默认的，彼此元素相加：C_result=Src+Dst|
@@ -128,7 +129,7 @@ void glBlendEquation(GLenum mode)
 
 ### 对比实验
 
-```
+```c++
 glEnable(GL_BLEND);
 glBlendFunc(GL_ZERO, GL_ZERO);
 glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -138,14 +139,13 @@ glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 ![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/0.png)
 
-
 - ```glBlendFunc(GL_ZERO, GL_ZERO)```
 
 
 
 ![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/1.png)
 
-这里比较好理解，source和target都乘以一个0， 最终颜色为黑色
+这里比较好理解，source和target都乘以一个0， 最终颜色为黑色```(0.0f, 0.0f, 0.0f)```
 
 - ```glBlendFunc(GL_ONE, GL_ZERO)```
 
@@ -157,11 +157,11 @@ glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 ![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/3.png)
 
-这里发现只有背景色，物体并没有渲染出来
+这里发现只有背景色，~~物体并没有渲染出来~~
 
 **Why?**
 
-最直观的原因在于：整个渲染过程，GL会首先将屏幕染色为背景色，渲染第一个物体的时候，需要与背景色混合，背景色为Target，待渲染物体为Source，混合方程设置了最终输出颜色只由Target决定，所以最终输出颜色只是背景色。
+最直观的原因在于：整个渲染过程，GL会首先将屏幕染色为背景色，渲染第一个物体的时候，需要与背景色混合，背景色为Target，待渲染物体为Source，混合方程设置了最终输出颜色只由Target决定，所以最终输出颜色只是背景色（这就是为什么我上面那句话加了删除线,其实物体还是渲染了的，只是最终算出来的颜色和环境一致而已）。
 
 - ```glBlendFunc(GL_ONE, GL_ONE)```
 
@@ -170,8 +170,8 @@ glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 1. 箱子
 2. 地板
 
-结果为
 ![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/4.png)
+
 ![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/6.png)
 
 这里发现最终输出结果，物体变透明了（需要注意的是，这里的贴图并没有alpha通道）。
@@ -215,8 +215,6 @@ void main()
 }
 ```
 
-结果为
-
 ![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/9.png)
 
 即默认值为1.0f。
@@ -225,7 +223,7 @@ void main()
 
 设置参数如下
 
-```
+```c++
 glEnable(GL_BLEND);
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 ```
@@ -236,8 +234,37 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 2. 箱子
 3. window
 
-结果如下：
+![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/10.png)
 
-![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/9.png)
+调整绘制顺序为
 
-发现后面的2个window
+1. 地板
+2. window
+3. 箱子
+
+![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/11.png)
+
+进一步地，调整绘制顺序为
+
+1. window
+2. 地板
+3. 箱子
+
+![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/12.png)
+
+### **结论**  
+
+## Blend 发生在Depth Testing 后面，**只有Depth Testing 为Pass状态时，才会有后续的Blend过程！**
+
+## 3. 渲染中使用Blend的原则
+
+1. 要让Blend在多物体上有效，我们必须先绘制最远的物体，最后绘制最近的物体。（保证Depth Testing后能记录远处物体的Color Buffer）
+
+2. 先绘制所有不透明物体。 为所有透明物体排序。（保证不透明物体在Color Buffer中, 保证多层Blend效果正确性）
+
+> 放一个最终的效果图
+
+![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/12.png)
+
+
+
