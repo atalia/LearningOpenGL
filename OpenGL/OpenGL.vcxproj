@@ -140,25 +140,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <None Include="Depth Testing\container.frag" />
-    <None Include="Depth Testing\container.vert" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Depth Testing\Camera.cpp" />
-    <ClCompile Include="Depth Testing\Depth Testing.cpp" />
-    <ClCompile Include="Depth Testing\shader.cpp" />
-    <ClCompile Include="Depth Testing\Texture.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Depth Testing\Camera.h" />
-    <ClInclude Include="Depth Testing\shader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Depth Testing\metal.png" />
-    <Image Include="Depth Testing\pattern4diffuseblack.jpg" />
-=======
     <None Include="Blending\container.frag" />
     <None Include="Blending\container.vert" />
     <None Include="packages.config" />
@@ -177,7 +158,6 @@
     <Image Include="Blending\grass.png" />
     <Image Include="Blending\metal.png" />
     <Image Include="Blending\pattern4diffuseblack.jpg" />
->>>>>>> 3f521a6916a759d794795cbcee8e0cca4b3fcb54
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

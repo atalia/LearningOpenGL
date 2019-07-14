@@ -2,17 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-<<<<<<< HEAD
-    <None Include="Depth Testing\container.frag">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Depth Testing\container.vert">
-=======
     <None Include="Blending\container.frag">
       <Filter>Sources</Filter>
     </None>
     <None Include="Blending\container.vert">
->>>>>>> 3f521a6916a759d794795cbcee8e0cca4b3fcb54
       <Filter>Sources</Filter>
     </None>
   </ItemGroup>
@@ -22,18 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <ClCompile Include="Depth Testing\Camera.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Depth Testing\Depth Testing.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Depth Testing\shader.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Depth Testing\Texture.cpp">
-=======
     <ClCompile Include="Blending\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -44,32 +25,18 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Blending\Blending.cpp">
->>>>>>> 3f521a6916a759d794795cbcee8e0cca4b3fcb54
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <ClInclude Include="Depth Testing\Camera.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Depth Testing\shader.h">
-=======
     <ClInclude Include="Blending\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Blending\shader.h">
->>>>>>> 3f521a6916a759d794795cbcee8e0cca4b3fcb54
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <Image Include="Depth Testing\metal.png">
-      <Filter>Sources</Filter>
-    </Image>
-    <Image Include="Depth Testing\pattern4diffuseblack.jpg">
-=======
     <Image Include="Blending\grass.png">
       <Filter>Sources</Filter>
     </Image>
@@ -77,7 +44,6 @@
       <Filter>Sources</Filter>
     </Image>
     <Image Include="Blending\pattern4diffuseblack.jpg">
->>>>>>> 3f521a6916a759d794795cbcee8e0cca4b3fcb54
       <Filter>Sources</Filter>
     </Image>
   </ItemGroup>
