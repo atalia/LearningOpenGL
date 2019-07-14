@@ -18,6 +18,9 @@
     <Image Include="Blending\pattern4diffuseblack.jpg">
       <Filter>Sources</Filter>
     </Image>
+    <Image Include="Blending\transparent_window.png">
+      <Filter>Sources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Blending\Camera.cpp">
@@ -29,7 +32,7 @@
     <ClCompile Include="Blending\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Blending\Blending_discard.cpp">
+    <ClCompile Include="Blending\Blending.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

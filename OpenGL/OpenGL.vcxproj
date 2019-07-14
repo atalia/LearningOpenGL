@@ -146,9 +146,10 @@
     <Image Include="Blending\grass.png" />
     <Image Include="Blending\metal.png" />
     <Image Include="Blending\pattern4diffuseblack.jpg" />
+    <Image Include="Blending\transparent_window.png" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Blending\Blending_discard.cpp" />
+    <ClCompile Include="Blending\Blending.cpp" />
     <ClCompile Include="Blending\Camera.cpp" />
     <ClCompile Include="Blending\shader.cpp" />
     <ClCompile Include="Blending\Texture.cpp" />

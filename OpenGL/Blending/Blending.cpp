@@ -106,7 +106,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Stencil Testing", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Blending", NULL, NULL);
 	if (window == NULL)
 	{
 		glfwTerminate();
@@ -130,7 +130,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 
-	Shader containShader("./Blending/container.vert", "./Blending/container_discard.frag");
+	Shader containShader("./Blending/container.vert", "./Blending/container.frag");
 
 	GLfloat cubeVertices[] = {
 		// Positions          // Texture Coords
@@ -187,7 +187,7 @@ int main()
 		5.0f,  -0.5f, -5.0f,  2.0f, 2.0f
 	};
 
-	GLfloat grassVertices[] =
+	GLfloat windowVertices[] =
 	{
 		// Positions         // Texture Coords (swapped y coordinates because texture is flipped upside down)
 		0.0f,  0.5f,  0.0f,  0.0f,  1.0f,
@@ -227,14 +227,14 @@ int main()
 	glEnableVertexAttribArray(1);
 	glBindVertexArray(0);
 
-	//grass
-	GLuint grassVBO, grassVAO;
-	glGenVertexArrays(1, &grassVAO);
-	glGenBuffers(1, &grassVBO);
+	//window
+	GLuint windowVBO, windowVAO;
+	glGenVertexArrays(1, &windowVAO);
+	glGenBuffers(1, &windowVBO);
 
-	glBindVertexArray(grassVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, grassVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(grassVertices), &grassVertices, GL_STATIC_DRAW);
+	glBindVertexArray(windowVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, windowVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(windowVertices), &windowVertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0));
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
@@ -256,17 +256,27 @@ int main()
 		vec3(2.0f, 0.0f, 0.0f)
 	};
 
-
-
+	
 	GLuint cubeTexture = loadTexture("./Blending/pattern4diffuseblack.jpg");
 	GLuint planeTexture = loadTexture("./Blending/metal.png");
-	GLuint grassTexture = loadTexture("./Blending/grass.png", cv::ImreadModes::IMREAD_UNCHANGED);
+	GLuint windowTexture = loadTexture("./Blending/transparent_window.png", cv::ImreadModes::IMREAD_UNCHANGED);
 	//Content End
 	GLfloat lastTime = 0.0f;
+
+	// 开启混合
+	glEnable(GL_BLEND);
+	// 设置混合
+	// source为window， target为container
+	//glBlendFunc(GL_ZERO, GL_ZERO);
+	//glBlendFunc(GL_ONE, GL_ZERO);
+	//glBlendFunc(GL_ZERO, GL_ONE);
+	//glBlendFunc(GL_ONE, GL_ONE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
-		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+		glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
+		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		//开启depth_test的话，一定要clear buffer，不然一定出错！
 		//glClear(GL_COLOR_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -285,7 +295,6 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-
 		//画一个地板
 		glBindVertexArray(planeVAO);
 		glBindTexture(GL_TEXTURE_2D, planeTexture);
@@ -293,9 +302,20 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
 
+		
+		// 画窗户
+		glBindVertexArray(windowVAO);
+		glBindTexture(GL_TEXTURE_2D, windowTexture);
+		for (uint i = 0; i < vegetation.size(); ++i)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, vegetation[i]);
+			glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		glBindVertexArray(0);
 
 		//画箱子
-
 		glBindVertexArray(containVAO);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		for (uint i = 0; i < containPosition.size(); ++i)
@@ -307,19 +327,10 @@ int main()
 		}
 		glBindVertexArray(0);
 
+		
+		
 
-		// 画草
-
-		glBindVertexArray(grassVAO);
-		glBindTexture(GL_TEXTURE_2D, grassTexture);
-		for (uint i = 0; i < vegetation.size(); ++i)
-		{
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, vegetation[i]);
-			glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
-		glBindVertexArray(0);
+		
 
 		glfwSwapBuffers(window);
 
