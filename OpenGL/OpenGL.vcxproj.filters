@@ -2,16 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Stencil Testing\singlecolor.frag">
+    <None Include="Blending\container.frag">
       <Filter>Sources</Filter>
     </None>
-    <None Include="Stencil Testing\singlecolor.vert">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Stencil Testing\container.frag">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Stencil Testing\container.vert">
+    <None Include="Blending\container.vert">
       <Filter>Sources</Filter>
     </None>
   </ItemGroup>
@@ -21,25 +15,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Stencil Testing\Camera.cpp">
+    <ClCompile Include="Blending\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Stencil Testing\Stencil Testing.cpp">
+    <ClCompile Include="Blending\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Stencil Testing\shader.cpp">
+    <ClCompile Include="Blending\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Stencil Testing\texture.cpp">
+    <ClCompile Include="Blending\Blending.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Stencil Testing\Camera.h">
+    <ClInclude Include="Blending\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Stencil Testing\shader.h">
+    <ClInclude Include="Blending\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Blending\grass.png">
+      <Filter>Sources</Filter>
+    </Image>
+    <Image Include="Blending\metal.png">
+      <Filter>Sources</Filter>
+    </Image>
+    <Image Include="Blending\pattern4diffuseblack.jpg">
+      <Filter>Sources</Filter>
+    </Image>
   </ItemGroup>
 </Project>
