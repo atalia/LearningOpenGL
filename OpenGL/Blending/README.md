@@ -264,7 +264,7 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 > 放一个最终的效果图
 
-![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/12.png)
+![avatar](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Blending/13.png)
 
 
 
