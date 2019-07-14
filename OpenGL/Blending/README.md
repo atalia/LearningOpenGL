@@ -194,7 +194,7 @@ glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 1. 混色是一个更新Color Buffer的过程。通过更新Color Buffer的值，即使贴图没有alpha值，依旧可以实现这种透明的效果，即透明效果的实现只是一个更新Color Buffer的过程(背景色->地板->箱子), alpha值只是给这个过程提供了一个参考（毕竟到现在，我们都没用到带alpha通道的图片）。
 
-2. Depth Testing，因为箱子在地板前，先绘制箱子，后绘制地板，那么地板更新时，是过不了Depth Testing，也就不会影响Color Buffer了。后续会专门讨论这个
+2. Depth Testing，因为箱子在地板前，先绘制箱子，后绘制地板，那么地板更新时，是过不了Depth Testing，也就不会影响Color Buffer了。后续会专门讨论这个。
 
 ### 不带alpha通道的贴图，alpha默认值是？
 
