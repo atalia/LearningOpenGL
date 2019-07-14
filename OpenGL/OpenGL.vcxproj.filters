@@ -20,8 +20,25 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Blending\Blending.cpp">
+    <ClCompile Include="Blending\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Blending\shader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Blending\Texture.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Blending\Blending_discard.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Blending\Camera.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Blending\shader.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

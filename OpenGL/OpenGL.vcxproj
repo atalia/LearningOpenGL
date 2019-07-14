@@ -148,7 +148,14 @@
     <Image Include="Blending\pattern4diffuseblack.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Blending\Blending.cpp" />
+    <ClCompile Include="Blending\Blending_discard.cpp" />
+    <ClCompile Include="Blending\Camera.cpp" />
+    <ClCompile Include="Blending\shader.cpp" />
+    <ClCompile Include="Blending\Texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Blending\Camera.h" />
+    <ClInclude Include="Blending\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
