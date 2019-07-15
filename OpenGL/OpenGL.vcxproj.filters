@@ -2,6 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Face Culling\container.frag">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="Face Culling\container.vert">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -9,38 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Blending\grass.png">
-      <Filter>Sources</Filter>
-    </Image>
-    <Image Include="Blending\metal.png">
-      <Filter>Sources</Filter>
-    </Image>
-    <Image Include="Blending\pattern4diffuseblack.jpg">
-      <Filter>Sources</Filter>
-    </Image>
-    <Image Include="Blending\transparent_window.png">
-      <Filter>Sources</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Blending\Camera.cpp">
+    <ClCompile Include="Face Culling\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Blending\shader.cpp">
+    <ClCompile Include="Face Culling\Face Culling.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Blending\Texture.cpp">
+    <ClCompile Include="Face Culling\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Blending\Blending.cpp">
+    <ClCompile Include="Face Culling\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Blending\Camera.h">
+    <ClInclude Include="Face Culling\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Blending\shader.h">
+    <ClInclude Include="Face Culling\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
