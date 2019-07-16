@@ -129,6 +129,7 @@ int main()
 
 	Shader containShader("./Face Culling/container.vert", "./Face Culling/container.frag");
 
+	/*
 	float cubeVertices[] = {
 		// Back face
 		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
@@ -174,6 +175,60 @@ int main()
 		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left        
 	};
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
+	*/
+	float cubeVertices[] = {
+		// Back face
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right    
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right              
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left                
+		// Front face
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right        
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left        
+		// Left face
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left       
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+		// Right face
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right      
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right          
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+		// Bottom face          
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left        
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+		// Top face
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right                 
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, // bottom-left  
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f  // top-left              
+	};
+
+	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CW);
+	glCullFace(GL_BACK);
+
 
 	//CUBE
 	GLuint cubeVBO, containVAO;
@@ -190,9 +245,7 @@ int main()
 	glBindVertexArray(0);
 
 	GLuint cubeTexture = loadTexture("./Face Culling/pattern4diffuseblack.jpg");
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CW);
+	
 
 	
 	//glEnable(GL_BLEND);
