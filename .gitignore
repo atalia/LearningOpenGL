@@ -262,3 +262,6 @@ __pycache__/
 
 # MAC Desktop Services Store
 *.DS_Store
+
+# VS Code
+.vscode/
