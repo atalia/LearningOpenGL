@@ -112,3 +112,23 @@ void Camera::processMouseScroll(GLfloat yoffset)
 	else
 		this->zoom -= yoffset;
 }
+
+GLfloat Camera::getYaw() const
+{
+	return this->yaw;
+}
+
+void Camera::setYaw(GLfloat yaw)
+{
+	this->yaw = yaw;
+}
+
+GLfloat Camera::getPitch() const
+{
+	return this->pitch;
+}
+
+void Camera::setPitch(GLfloat pitch)
+{
+	this->pitch = pitch;
+}

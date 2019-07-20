@@ -21,13 +21,13 @@
     <ClCompile Include="Framebuffers\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Framebuffers\Framebuffers.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Framebuffers\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Framebuffers\Texture.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Framebuffers\rearview mirror.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

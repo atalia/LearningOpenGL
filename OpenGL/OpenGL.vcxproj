@@ -147,7 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framebuffers\Camera.cpp" />
-    <ClCompile Include="Framebuffers\Framebuffers.cpp" />
+    <ClCompile Include="Framebuffers\rearview mirror.cpp" />
     <ClCompile Include="Framebuffers\shader.cpp" />
     <ClCompile Include="Framebuffers\Texture.cpp" />
   </ItemGroup>

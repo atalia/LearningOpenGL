@@ -1,4 +1,4 @@
-ï»¿#pragma comment(lib, "openGL32.lib")
+#pragma comment(lib, "openGL32.lib")
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -25,7 +25,7 @@ bool keys[1024];
 bool firstMouse = true;
 GLfloat lastX = 400;
 GLfloat lastY = 300;
-Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));//å…¨å±€å”¯ä¸€çš„ç›¸æœº
+Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));//È«¾ÖÎ¨Ò»µÄÏà»ú
 
 
 
@@ -105,7 +105,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Frame Buffers", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Rearview Mirror", NULL, NULL);
 	if (window == NULL)
 	{
 		glfwTerminate();
@@ -117,7 +117,7 @@ int main()
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetScrollCallback(window, scroll_callback);
 	glewExperimental = GL_TRUE;
-	
+
 	if (glewInit() != GLEW_OK)
 	{
 		std::cout << "GLEW INIT FAILURE" << std::endl;
@@ -127,7 +127,7 @@ int main()
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 	glEnable(GL_DEPTH_TEST);
-	
+
 
 	Shader containShader("./Framebuffers/container.vert", "./Framebuffers/container.frag");
 	Shader screenShader("./Framebuffers/postprocess.vert", "./Framebuffers/postprocess.frag");
@@ -188,16 +188,17 @@ int main()
 		5.0f,  -0.5f, -5.0f,  2.0f, 2.0f
 	};
 
+
 	GLfloat screenVertices[]
 	{
 		// Positions   // TexCoords
-	  -1.0f,  1.0f,  0.0f, 1.0f,
-	  -1.0f, -1.0f,  0.0f, 0.0f,
-	   1.0f, -1.0f,  1.0f, 0.0f,
+		-0.3f,  1.3f,  0.0f, 1.0f,
+		-0.3f,  0.7f,  0.0f, 0.0f,
+		 0.3f,  0.7f,  1.0f, 0.0f,
 
-	  -1.0f,  1.0f,  0.0f, 1.0f,
-	   1.0f, -1.0f,  1.0f, 0.0f,
-	   1.0f,  1.0f,  1.0f, 1.0f
+		-0.3f,  1.3f,  0.0f, 1.0f,
+		 0.3f,  0.7f,  1.0f, 0.0f,
+		 0.3f,  1.3f,  1.0f, 1.0f
 	};
 
 	//CUBE
@@ -244,15 +245,15 @@ int main()
 
 	GLuint cubeTexture = loadTexture("./Framebuffers/container.jpg");
 	GLuint planeTexture = loadTexture("./Framebuffers/metal.png");
-	
-	const std::vector<glm::vec3> CONTAIN_POSITION = {glm::vec3(-1.0f, 0.0f, -1.0f) , glm::vec3(2.0f, 0.0f, 0.0f)};
+
+	const std::vector<glm::vec3> CONTAIN_POSITION = { glm::vec3(-1.0f, 0.0f, -1.0f) , glm::vec3(2.0f, 0.0f, 0.0f) };
 
 
 
 	/*
 	Framebuffers code start!
 	*/
-	
+
 	GLuint fbo;
 	glGenFramebuffers(1, &fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -262,22 +263,22 @@ int main()
 	GLuint textureDepthStencilbuffer = generateAttachmentTexture(true, true);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, textureDepthStencilbuffer, 0);
 	*/
-	
+
 	GLuint rbo;
 	glGenRenderbuffers(1, &rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-	
-	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	
+
 	// Framebuffer end;
 	GLfloat lastTime = 0.0f;
-	
-	
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
@@ -286,10 +287,10 @@ int main()
 		lastTime = currentTime;
 		move(camera, deltaTime);
 
-		
+		// ºóÊÓ¾µ¿ªÊ¼
 		//draw to framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-		
+
 		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
@@ -297,20 +298,27 @@ int main()
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glm::mat4 model(1.0f);
+		camera.setYaw(camera.getYaw() + 180.0f);
+		camera.setPitch(camera.getPitch() + 180.f);
+		camera.processMouseMovement(0.0f, 0.0f, false);
 		glm::mat4 view = camera.getView();
+		camera.setYaw(camera.getYaw() - 180.0f);
+		camera.setPitch(camera.getPitch() - 180.f);
+		camera.processMouseMovement(0.0f, 0.0f, true);
+		//view = camera.getView();
 		glm::mat4 projection = glm::perspective(camera.getZoom(), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		
+
 		containShader.Use();
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-		//ç”»åœ°æ¿
+		//»­µØ°å
 		glBindVertexArray(planeVAO);
 		glBindTexture(GL_TEXTURE_2D, planeTexture);
 		model = glm::scale(model, glm::vec3(1000.0f, 1.0f, 1000.0f));
 		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
-		//ç”»ç®±å­
+		//»­Ïä×Ó
 		glBindVertexArray(containVAO);
 		glBindTexture(GL_TEXTURE_2D, cubeTexture);
 		for (int i = 0; i < CONTAIN_POSITION.size(); ++i)
@@ -321,34 +329,61 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 		glBindVertexArray(0);
-		
-		
+
+
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		//draw to screen 
+		// ºóÊÓ¾µ½áÊø
 
-		
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glDisable(GL_DEPTH_TEST);
+		
+
+		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
+		//glDisable(GL_CULL_FACE);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		model = glm::mat4(1.0f);
+		view = camera.getView();
+		projection = glm::perspective(camera.getZoom(), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+		containShader.Use();
+		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		//»­µØ°å
+		glBindVertexArray(planeVAO);
+		glBindTexture(GL_TEXTURE_2D, planeTexture);
+		model = glm::scale(model, glm::vec3(1000.0f, 1.0f, 1000.0f));
+		glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
+		//»­Ïä×Ó
+		glBindVertexArray(containVAO);
+		glBindTexture(GL_TEXTURE_2D, cubeTexture);
+		for (int i = 0; i < CONTAIN_POSITION.size(); ++i)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, CONTAIN_POSITION[i]);
+			glUniformMatrix4fv(glGetUniformLocation(containShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		glBindVertexArray(0);
+
+
 
 		screenShader.Use();
-
-
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-		/*
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CW);
-		*/
 		
+
+
 		glBindVertexArray(screenVAO);
 		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
-		
+
 		glfwSwapBuffers(window);
-		
+
 	}
 	glDeleteBuffers(1, &cubeVBO);
 	glDeleteVertexArrays(1, &containVAO);

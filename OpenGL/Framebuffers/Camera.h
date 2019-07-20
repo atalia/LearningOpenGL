@@ -56,4 +56,10 @@ public:
 	void processMouseMovement(GLfloat, GLfloat, GLboolean constrainPitch = true);
 	void processMouseScroll(GLfloat);
 
+	GLfloat getYaw() const;
+
+	void setYaw(GLfloat yaw);
+
+	GLfloat getPitch() const;
+	void setPitch(GLfloat pitch);
 };
