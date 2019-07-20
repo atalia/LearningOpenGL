@@ -33,3 +33,15 @@ GLuint loadTexture(const std::string filepath)
 	img.release();
 	return texture;
 }
+
+GLuint generateAttachmentTexture(GLboolean depth, GLboolean stencil)
+{
+	GLenum glattanchmentType;
+	if (!depth && !stencil)
+		glattanchmentType = GL_RGB;
+	else if (depth && !stencil)
+		glattanchmentType = GL_COLOR_COMPONENTS;
+	else
+		glattanchmentType = GL_STENCIL_INDEX;
+	glTexImage2D(GL_TEXTURE_2D, 0, glattanchmentType, 800, 600, 0, glattanchmentType, GL_UNSIGNED_INT_24_8, NULL);
+}

@@ -222,8 +222,11 @@ int main()
 	/*
 	Framebuffers code here!
 	*/
-	
+	GLuint fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
+	
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
