@@ -140,23 +140,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Framebuffers\container.frag" />
-    <None Include="Framebuffers\container.vert" />
-    <None Include="Framebuffers\README.md" />
+    <None Include="Cubemaps\container.frag" />
+    <None Include="Cubemaps\container.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Framebuffers\Camera.cpp" />
-    <ClCompile Include="Framebuffers\rearview mirror.cpp" />
-    <ClCompile Include="Framebuffers\shader.cpp" />
-    <ClCompile Include="Framebuffers\Texture.cpp" />
+    <ClCompile Include="Cubemaps\Camera.cpp" />
+    <ClCompile Include="Cubemaps\Cubemaps.cpp" />
+    <ClCompile Include="Cubemaps\shader.cpp" />
+    <ClCompile Include="Cubemaps\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Framebuffers\Camera.h" />
-    <ClInclude Include="Framebuffers\shader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Framebuffers\pattern4diffuseblack.jpg" />
+    <ClInclude Include="Cubemaps\Camera.h" />
+    <ClInclude Include="Cubemaps\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

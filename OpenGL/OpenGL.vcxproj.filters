@@ -2,13 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Framebuffers\container.frag">
+    <None Include="Cubemaps\container.frag">
       <Filter>Sources</Filter>
     </None>
-    <None Include="Framebuffers\container.vert">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Framebuffers\README.md">
+    <None Include="Cubemaps\container.vert">
       <Filter>Sources</Filter>
     </None>
   </ItemGroup>
@@ -18,30 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Framebuffers\Camera.cpp">
+    <ClCompile Include="Cubemaps\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Framebuffers\shader.cpp">
+    <ClCompile Include="Cubemaps\Cubemaps.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Framebuffers\Texture.cpp">
+    <ClCompile Include="Cubemaps\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Framebuffers\rearview mirror.cpp">
+    <ClCompile Include="Cubemaps\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Framebuffers\Camera.h">
+    <ClInclude Include="Cubemaps\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Framebuffers\shader.h">
+    <ClInclude Include="Cubemaps\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Framebuffers\pattern4diffuseblack.jpg">
-      <Filter>Sources</Filter>
-    </Image>
   </ItemGroup>
 </Project>
