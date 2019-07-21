@@ -240,4 +240,4 @@ glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 > 实现思路: 绘制场景两次:一次正常绘制,另一次摄像机旋转180度后绘制.
 
-![image](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Framebuffers/Framebuffers.gif)
+![image](https://github.com/atalia/LearningOpenGL/blob/master/OpenGL/Framebuffers/rearview%20mirror.gif)
