@@ -146,7 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cubemaps\Camera.cpp" />
-    <ClCompile Include="Cubemaps\Cubemaps.cpp" />
+    <ClCompile Include="Cubemaps\Refraction.cpp" />
     <ClCompile Include="Cubemaps\shader.cpp" />
     <ClCompile Include="Cubemaps\Texture.cpp" />
   </ItemGroup>

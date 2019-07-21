@@ -18,13 +18,13 @@
     <ClCompile Include="Cubemaps\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Cubemaps\Cubemaps.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Cubemaps\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Cubemaps\Texture.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Cubemaps\Refraction.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

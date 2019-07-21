@@ -4,7 +4,7 @@ in vec3 textureDir;
 
 out vec4 color;
 
-uniform sampler3D cubeTexture;
+uniform samplerCube cubeTexture;
 
 void main()
 {
