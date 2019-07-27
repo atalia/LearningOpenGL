@@ -2,13 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Advanced GLSL\container.frag">
+    <None Include="Geometry Shader\container.frag">
       <Filter>Sources</Filter>
     </None>
-    <None Include="Advanced GLSL\container.vert">
+    <None Include="Geometry Shader\container.vert">
       <Filter>Sources</Filter>
     </None>
-    <None Include="Advanced GLSL\README.md">
+    <None Include="Geometry Shader\README.md">
       <Filter>Sources</Filter>
     </None>
   </ItemGroup>
@@ -18,24 +18,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Advanced GLSL\Advanced GLSL.cpp">
+    <ClCompile Include="Geometry Shader\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced GLSL\Camera.cpp">
+    <ClCompile Include="Geometry Shader\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced GLSL\shader.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Advanced GLSL\Texture.cpp">
+    <ClCompile Include="Geometry Shader\Geometry Shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Advanced GLSL\Camera.h">
+    <ClInclude Include="Geometry Shader\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Advanced GLSL\shader.h">
+    <ClInclude Include="Geometry Shader\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>

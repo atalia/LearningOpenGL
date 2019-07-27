@@ -140,20 +140,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Advanced GLSL\container.frag" />
-    <None Include="Advanced GLSL\container.vert" />
-    <None Include="Advanced GLSL\README.md" />
+    <None Include="Geometry Shader\container.frag" />
+    <None Include="Geometry Shader\container.vert" />
+    <None Include="Geometry Shader\README.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Advanced GLSL\Advanced GLSL.cpp" />
-    <ClCompile Include="Advanced GLSL\Camera.cpp" />
-    <ClCompile Include="Advanced GLSL\shader.cpp" />
-    <ClCompile Include="Advanced GLSL\Texture.cpp" />
+    <ClCompile Include="Geometry Shader\Camera.cpp" />
+    <ClCompile Include="Geometry Shader\Geometry Shader.cpp" />
+    <ClCompile Include="Geometry Shader\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Advanced GLSL\Camera.h" />
-    <ClInclude Include="Advanced GLSL\shader.h" />
+    <ClInclude Include="Geometry Shader\Camera.h" />
+    <ClInclude Include="Geometry Shader\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
