@@ -2,15 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Geometry Shader\container.frag">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Geometry Shader\container.vert">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Geometry Shader\README.md">
-      <Filter>Sources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -18,22 +9,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Geometry Shader\Camera.cpp">
+    <ClInclude Include="Model\Mesh.h">
       <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Geometry Shader\shader.cpp">
+    </ClInclude>
+    <ClInclude Include="Model\Model.h">
       <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Geometry Shader\Geometry Shader.cpp">
+    </ClInclude>
+    <ClInclude Include="Model\Shader.h">
       <Filter>Sources</Filter>
-    </ClCompile>
+    </ClInclude>
+    <ClInclude Include="Model\Camera.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Geometry Shader\Camera.h">
+    <ClCompile Include="Model\Shader.cpp">
       <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Geometry Shader\shader.h">
+    </ClCompile>
+    <ClCompile Include="Model\model.cpp">
       <Filter>Sources</Filter>
-    </ClInclude>
+    </ClCompile>
+    <ClCompile Include="Model\Camera.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
