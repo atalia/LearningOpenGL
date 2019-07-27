@@ -2,10 +2,41 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Advanced GLSL\container.frag">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="Advanced GLSL\container.vert">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="Advanced GLSL\README.md">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
       <UniqueIdentifier>{9d1fcd36-6640-4f4c-9183-7868a91b238a}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Advanced GLSL\Advanced GLSL.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced GLSL\Camera.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced GLSL\shader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced GLSL\Texture.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Advanced GLSL\Camera.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Advanced GLSL\shader.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
