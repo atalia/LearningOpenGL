@@ -2,38 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Cubemaps\container.frag">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Cubemaps\container.vert">
-      <Filter>Sources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
       <UniqueIdentifier>{9d1fcd36-6640-4f4c-9183-7868a91b238a}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Cubemaps\Camera.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Cubemaps\shader.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Cubemaps\Texture.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Cubemaps\Refraction.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Cubemaps\Camera.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Cubemaps\shader.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
