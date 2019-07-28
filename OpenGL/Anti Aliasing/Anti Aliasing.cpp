@@ -100,7 +100,9 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VERSION_MAJOR);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
+	//MULTISAMPLES
+	glfwWindowHint(GLFW_SAMPLES, 8);
+	
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Anti Aliasing", NULL, NULL);
 	if (window == NULL)
 	{
@@ -124,6 +126,8 @@ int main()
 	glViewport(0, 0, width, height);
 	glEnable(GL_DEPTH_TEST);
 	
+	//MULTISAMPLES
+	glEnable(GL_MULTISAMPLE);
 	Shader shader("./Anti Aliasing/shader.vert", "./Anti Aliasing/shader.frag");
 
 
@@ -172,23 +176,20 @@ int main()
 		-0.5f,  0.5f, -0.5f
 	};
 
-	GLuint vao, vbo;
-	glGenVertexArrays(1, &vao);
-	glGenBuffers(1, &vbo);
 	
-	/*
-	std::cout << vao << std::endl;
-	std::cout << vbo << std::endl;
-	glBindVertexArray(vao);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	GLuint VAO, VBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	
+	
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)(0));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
-	*/
 	
-	/*
+	
 	GLuint ubo;
 	glGenBuffers(1, &ubo);
 	glBindBuffer(GL_UNIFORM_BUFFER, ubo);
@@ -199,7 +200,7 @@ int main()
 	GLuint bindingpoint = 0;
 	glUniformBlockBinding(shader.Program, glGetUniformBlockIndex(shader.Program, "Matrice"), bindingpoint);
 	glBindBufferBase(GL_UNIFORM_BUFFER, bindingpoint, ubo);
-	*/
+	
 
 	//Content End
 	GLfloat lastTime = 0.0f;
@@ -220,18 +221,17 @@ int main()
 		glm::mat4 model(1.0f);
 
 		shader.Use();
-		/*
+		
 		glBindBuffer(GL_UNIFORM_BUFFER, ubo);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
 		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-		*/
+		
+		
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "project"), 1, GL_FALSE, glm::value_ptr(projection));
+	
 
-
-		glBindVertexArray(vao);
+		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 		
