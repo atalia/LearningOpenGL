@@ -1,8 +1,12 @@
 ﻿#pragma comment(lib,"OpenGL32")
-#include<GL/glew.h>
-#include<GLFW/glfw3.h>
-#include<iostream>
-#include"Shader.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "Shader.h"
+#include <sstream>
 
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;
@@ -46,9 +50,9 @@ int main()
 		return -1;
 	}
 	
-	int width, height;
-	glfwGetFramebufferSize(window, &width, &height);
-	glViewport(0, 0, width, height);
+	//int width, height;
+	//glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
 	/*code start here*/
 
@@ -64,19 +68,130 @@ int main()
 		 0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
 		 0.05f,  0.05f,  0.0f, 1.0f, 1.0f
 	};
-
+	
+	/*方法1 基于OPENGL uniform interface block 以及uniform buffer 、 glbuffersubdata实现		
+	======================================================================================================================|
+	|				                                                                                                      |
+	|																													  |
+	|																													  |
+	|	GLuint vao, vbo;																								  |
+	|	glGenBuffers(1, &vbo);																							  |
+	|	glGenVertexArrays(1, &vao);																						  |
+	|																													  |
+	|	glBindVertexArray(vao);																							  |
+	|	glBindBuffer(GL_ARRAY_BUFFER, vbo);																				  |
+	|	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);								  |
+	|	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0));								  |
+	|	glEnableVertexAttribArray(0);																					  |
+	|	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));			  |
+	|	glEnableVertexAttribArray(1);																					  |
+	|	glBindBuffer(GL_ARRAY_BUFFER, 0);																				  |
+	|	glBindVertexArray(0);																							  |
+	|																													  |
+	|	glm::vec2 translation[100];																						  |
+	|	int index = 0;																									  |
+	|	GLfloat offset = 0.1f;																							  |
+	|																													  |
+	|																													  |
+	|	GLuint offsetbindpoint = 0;																						  |
+	|	glUniformBlockBinding(shader.Program, glGetUniformBlockIndex(shader.Program, "OFFSET"), offsetbindpoint);		  |
+	|																													  |
+	|	GLuint ubo;																										  |
+	|	glGenBuffers(1, &ubo);																							  |
+	|	glBindBuffer(GL_UNIFORM_BUFFER, ubo);																			  |
+	|	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(translation), NULL, GL_STATIC_DRAW);									  |
+	|	//glBufferData(GL_UNIFORM_BUFFER, sizeof(translation), translation, GL_STATIC_DRAW);							  |
+	|																													  |
+	|																													  |
+	|	for (int y = -10; y < 10; y += 2)																				  |
+	|	{																												  |
+	|		for (int x = -10; x < 10; x += 2)																			  |
+	|		{																											  |
+	|			translation[index] = glm::vec2(x/10.0f + offset, y/10.0f + offset);										  |
+	|			//std::cout << x / 10.0f + offset << ","<< y/10.0f + offset << std::endl;								  |
+	|			glBufferSubData(GL_UNIFORM_BUFFER, index * sizeof(glm::vec4), sizeof(glm::vec2), translation + index);	  |
+	|			index += 1;																								  |
+	|		}																											  |
+	|	}																												  |
+	|																													  |
+	|	glBindBuffer(GL_UNIFORM_BUFFER, 0);																				  |
+	|																													  |
+	|	glBindBufferBase(GL_UNIFORM_BUFFER, offsetbindpoint, ubo);														  |
+	|																												      |
+	|=====================================================================================================================|
+	
+	*/
+	//方法2. 直接申明uniform数组，然后定位到对应的offset，opengl获取glsl中具体index的数组变量，只能一个一个获取，无法通过偏移得到！
+	/*
 	GLuint vao, vbo;
 	glGenBuffers(1, &vbo);
 	glGenVertexArrays(1, &vao);
 
+	glBindVertexArray(vao);																							  
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);																				  
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);								  
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0));								  
+	glEnableVertexAttribArray(0);																					  
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));			  
+	glEnableVertexAttribArray(1);																					  
+	glBindBuffer(GL_ARRAY_BUFFER, 0);																				  
+	glBindVertexArray(0);
+
+	glm::vec2 translation[100];
+	int index = 0;
+	float offset = 0.1f;
+	for (int y = -10; y < 10; y += 2)																				  
+	{																											
+		for (int x = -10; x < 10; x += 2)																		
+		{																										
+			translation[index++] = glm::vec2(x / 10.0f + offset, y / 10.0f + offset);																															
+		}																										
+	}
+
+
+	shader.Use();
+	for (GLuint i = 0; i < 100; ++i)
+	{
+		std::stringstream ss;
+		ss << "offsets[" << i << "]";
+		//std::cout << ss.str().c_str() << std::endl;
+		glUniform2f(glGetUniformLocation(shader.Program, ss.str().c_str()), translation[i].x, translation[i].y);
+	}
+	*/
+	glm::vec2 translation[100];
+	int index = 0;
+	float offset = 0.1f;
+	for (int y = -10; y < 10; y += 2)
+	{
+		for (int x = -10; x < 10; x += 2)
+		{
+			translation[index++] = glm::vec2(x / 10.0f + offset, y / 10.0f + offset);
+		}
+	}
+	GLuint vao, vbo, transvbo;
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &transvbo);
+	glGenVertexArrays(1, &vao);
+
+
 	glBindVertexArray(vao);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0));
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, transvbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(translation), translation, GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (GLvoid*)(0));
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glVertexAttribDivisor(2, 1);
 	glBindVertexArray(0);
+
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -84,13 +199,13 @@ int main()
 		glfwPollEvents();
 		// Render Start
 		// 设置清屏所用的颜色
-		glClearColor(0.5f, 0.6f, 0.7f, 0.0f); //状态设置函数
+		glClearColor(0.05f, 0.05f, 0.05f, 1.0f); //状态设置函数
 		// 清空颜色缓冲
 		glClear(GL_COLOR_BUFFER_BIT); //状态应用函数
 
 		shader.Use();
 		glBindVertexArray(vao);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100);
 		glBindVertexArray(0);
 		// 交换缓冲
 		glfwSwapBuffers(window);
