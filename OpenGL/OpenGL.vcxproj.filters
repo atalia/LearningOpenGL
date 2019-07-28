@@ -9,28 +9,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Model\Mesh.h">
+    <ClCompile Include="Instancing\Instancing.cpp">
       <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Model\Model.h">
+    </ClCompile>
+    <ClCompile Include="Instancing\Shader.cpp">
       <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Model\Shader.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Model\Camera.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Model\Shader.cpp">
+    <ClInclude Include="Instancing\Shader.h">
       <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Model\model.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Model\Camera.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
+    </ClInclude>
   </ItemGroup>
 </Project>

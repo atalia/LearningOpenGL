@@ -144,15 +144,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Model\Camera.h" />
-    <ClInclude Include="Model\Mesh.h" />
-    <ClInclude Include="Model\Model.h" />
-    <ClInclude Include="Model\Shader.h" />
+    <ClCompile Include="Instancing\Instancing.cpp" />
+    <ClCompile Include="Instancing\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Model\Camera.cpp" />
-    <ClCompile Include="Model\model.cpp" />
-    <ClCompile Include="Model\Shader.cpp" />
+    <ClInclude Include="Instancing\Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
