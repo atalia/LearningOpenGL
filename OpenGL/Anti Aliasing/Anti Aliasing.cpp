@@ -176,7 +176,7 @@ int main()
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 	
-	
+	/*
 	std::cout << vao << std::endl;
 	std::cout << vbo << std::endl;
 	glBindVertexArray(vao);
@@ -186,7 +186,7 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)(0));
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
-
+	*/
 	
 	/*
 	GLuint ubo;
