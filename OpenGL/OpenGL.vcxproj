@@ -144,11 +144,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Instancing\Instancing.cpp" />
-    <ClCompile Include="Instancing\Shader.cpp" />
+    <ClCompile Include="Anti Aliasing\Anti Aliasing.cpp" />
+    <ClCompile Include="Anti Aliasing\Camera.cpp" />
+    <ClCompile Include="Anti Aliasing\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Instancing\Shader.h" />
+    <ClInclude Include="Anti Aliasing\Camera.h" />
+    <ClInclude Include="Anti Aliasing\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

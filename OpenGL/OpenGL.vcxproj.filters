@@ -9,15 +9,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Instancing\Instancing.cpp">
+    <ClCompile Include="Anti Aliasing\Anti Aliasing.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Instancing\Shader.cpp">
+    <ClCompile Include="Anti Aliasing\Camera.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Anti Aliasing\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Instancing\Shader.h">
+    <ClInclude Include="Anti Aliasing\Camera.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Anti Aliasing\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
