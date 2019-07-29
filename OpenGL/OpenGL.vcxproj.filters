@@ -9,13 +9,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Anti Aliasing\Anti Aliasing.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Anti Aliasing\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Anti Aliasing\shader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Anti Aliasing\off-screen MSAA.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

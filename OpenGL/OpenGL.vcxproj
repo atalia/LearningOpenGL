@@ -144,8 +144,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Anti Aliasing\Anti Aliasing.cpp" />
     <ClCompile Include="Anti Aliasing\Camera.cpp" />
+    <ClCompile Include="Anti Aliasing\off-screen MSAA.cpp" />
     <ClCompile Include="Anti Aliasing\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
