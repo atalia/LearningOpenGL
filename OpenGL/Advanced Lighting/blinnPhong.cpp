@@ -23,14 +23,27 @@ GLfloat lastX = 400;
 GLfloat lastY = 300;
 Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));//全局唯一的相机
 
-
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	if (key > 0 && key < 1024)
+	if (key == GLFW_KEY_B)
+	{
+		if(action == GLFW_PRESS)
+		{
+			if (keys[key])
+			{
+				keys[key] = false;
+			}
+			else
+			{
+				keys[key] = true;
+			}
+		}
+	}
+	else if (key > 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)
 		{
@@ -170,8 +183,19 @@ int main()
 	//code start
 	glm::vec3 lightPos = glm::vec3(0, 0, 0);
 
+	GLuint lightubo;
+	glGenBuffers(1, &lightubo);
+	glBindBuffer(GL_UNIFORM_BUFFER, lightubo);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4) + sizeof(GLfloat), NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), glm::value_ptr(lightPos));
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-
+	GLuint lightbindpoint = 1;
+	glUniformBlockBinding(shader.Program, glGetUniformBlockIndex(shader.Program, "Light"), lightbindpoint);
+	
+	glBindBufferBase(GL_UNIFORM_BUFFER, lightbindpoint, lightubo);
+	
+	std::cout << sizeof(GLboolean) << "," << sizeof(GLfloat) << std::endl;
 	
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
@@ -189,6 +213,7 @@ int main()
 		glm::mat4 projection = glm::perspective(camera.getZoom(), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 1000.0f);
 		glm::mat4 view = camera.getView();
 		glm::mat4 model(1.0f);
+		
 
 		glBindBuffer(GL_UNIFORM_BUFFER, ubo);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
@@ -197,6 +222,13 @@ int main()
 
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
+		glBindBuffer(GL_UNIFORM_BUFFER, lightubo);
+		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(camera.getCameraPos()));
+		//glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec4), sizeof(GLboolean), (GLvoid*)(keys + GLFW_KEY_B));
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		
+		glUniform1i(glGetUniformLocation(shader.Program, "blinn"), keys[GLFW_KEY_B]);
+		std::cout <<keys + GLFW_KEY_B<<"     "<<(keys[GLFW_KEY_B] ? "true" : "false") << std::endl;
 		shader.Use();
 		glBindVertexArray(floorVAO);
 		glBindTexture(GL_TEXTURE_2D, floorTexture);
