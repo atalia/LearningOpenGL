@@ -2,6 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Advanced Lighting\blinnPhong.frag">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="Advanced Lighting\blinnPhong.vert">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="Advanced Lighting\shader.frag">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -9,22 +18,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Anti Aliasing\Camera.cpp">
+    <ClCompile Include="Advanced Lighting\blinnPhong.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Anti Aliasing\shader.cpp">
+    <ClCompile Include="Advanced Lighting\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Anti Aliasing\off-screen MSAA.cpp">
+    <ClCompile Include="Advanced Lighting\shader.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Advanced Lighting\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Anti Aliasing\Camera.h">
+    <ClInclude Include="Advanced Lighting\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Anti Aliasing\shader.h">
+    <ClInclude Include="Advanced Lighting\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Advanced Lighting\wood.png">
+      <Filter>Sources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

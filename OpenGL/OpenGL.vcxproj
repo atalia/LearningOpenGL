@@ -141,16 +141,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="Advanced Lighting\blinnPhong.frag" />
+    <None Include="Advanced Lighting\blinnPhong.vert" />
+    <None Include="Advanced Lighting\shader.frag" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Anti Aliasing\Camera.cpp" />
-    <ClCompile Include="Anti Aliasing\off-screen MSAA.cpp" />
-    <ClCompile Include="Anti Aliasing\shader.cpp" />
+    <ClCompile Include="Advanced Lighting\blinnPhong.cpp" />
+    <ClCompile Include="Advanced Lighting\Camera.cpp" />
+    <ClCompile Include="Advanced Lighting\shader.cpp" />
+    <ClCompile Include="Advanced Lighting\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Anti Aliasing\Camera.h" />
-    <ClInclude Include="Anti Aliasing\shader.h" />
+    <ClInclude Include="Advanced Lighting\Camera.h" />
+    <ClInclude Include="Advanced Lighting\shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Advanced Lighting\wood.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
