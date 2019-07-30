@@ -14,7 +14,7 @@ const int SCR_HEIGHT = 600;
 const int VERSION_MINOR = 3;
 const int VERSION_MAJOR = 3;
 const int NR_POINT_LIGHTS = 4;
-
+const int SAMPLES = 4;
 
 bool keys[1024];
 
@@ -128,7 +128,8 @@ int main()
 	
 	Shader shader("./Anti Aliasing/shader.vert", "./Anti Aliasing/shader.frag");
 	Shader quadShader("./Anti Aliasing/offscreen.vert", "./Anti Aliasing/offscreen.frag");
-
+	Shader glslProcessShader("./Anti Aliasing/antiAliasingbyglsl.vert", "./Anti Aliasing/antiAliasingbyglsl.frag");
+	
 	GLfloat cubeVertices[] = {
 		// Positions       
 		-0.5f, -0.5f, -0.5f,
@@ -187,7 +188,6 @@ int main()
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 	
-	
 	GLuint ubo;
 	glGenBuffers(1, &ubo);
 	glBindBuffer(GL_UNIFORM_BUFFER, ubo);
@@ -198,7 +198,8 @@ int main()
 	GLuint bindingpoint = 0;
 	glUniformBlockBinding(shader.Program, glGetUniformBlockIndex(shader.Program, "Matrice"), bindingpoint);
 	glBindBufferBase(GL_UNIFORM_BUFFER, bindingpoint, ubo);
-	
+
+
 	//off-screen fbo start
 	float quadVertices[] = {   // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
 		// positions   // texCoords
@@ -227,12 +228,12 @@ int main()
 
 	GLuint framebuffer;
 	glGenFramebuffers(1, &framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	GLuint colorbuffertexture;
 	glGenTextures(1, &colorbuffertexture);
 	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, colorbuffertexture);
-	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB, SCR_WIDTH, SCR_HEIGHT, GL_TRUE);
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, SAMPLES, GL_RGB, SCR_WIDTH, SCR_HEIGHT, GL_TRUE);
 	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, colorbuffertexture, 0);
 
@@ -240,7 +241,7 @@ int main()
 	GLuint renderbuffer;
 	glGenRenderbuffers(1, &renderbuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
-	glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT);
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, SAMPLES, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
 	
@@ -273,41 +274,53 @@ int main()
 	{
 		glfwPollEvents();
 
-		
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
-
-		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
 		GLfloat currentTime = glfwGetTime();
 		GLfloat deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
-		move(camera, deltaTime); 
+		move(camera, deltaTime);
 
 		glm::mat4 projection = glm::perspective(camera.getZoom(), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 1000.0f);
 		glm::mat4 view = camera.getView();
 		glm::mat4 model(1.0f);
+		//matrixShow(view);
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+		glEnable(GL_DEPTH_TEST);
+		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
+		
 		shader.Use();
+		
 		glBindBuffer(GL_UNIFORM_BUFFER, ubo);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
 		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		
+		//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
-
-		glBindFramebuffer(GL_READ_BUFFER, framebuffer);
-		glBindFramebuffer(GL_DRAW_BUFFER, screenframebuffer);
+		
+		
+		/*不带后处理
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 		glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+		*/
 
+		//带后处理
+		/*
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, screenframebuffer);
+		glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		
-		
 		
 		glDisable(GL_DEPTH_TEST);
 		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
@@ -316,11 +329,25 @@ int main()
 		
 		quadShader.Use();
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glBindVertexArray(quadVAO);
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, screenTexture);
+		glBindTexture(GL_TEXTURE_2D, screenTexture);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
-		
+		*/
+
+		//黑科技，直接在SHADER中处理
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDisable(GL_DEPTH_TEST);
+		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+
+		glClear(GL_COLOR_BUFFER_BIT);
+		glslProcessShader.Use();
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glBindVertexArray(quadVAO);
+		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, colorbuffertexture);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
 		glfwSwapBuffers(window);
 		
 	}

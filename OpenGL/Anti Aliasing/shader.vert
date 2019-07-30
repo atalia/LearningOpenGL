@@ -8,10 +8,10 @@ layout(std140) uniform Matrice
     mat4 projection;
     mat4 view;
 };
-/*
-uniform mat4 projection;
-uniform mat4 view;
-*/
+
+// uniform mat4 projection;
+// uniform mat4 view;
+
 uniform mat4 model;
 
 void main()
