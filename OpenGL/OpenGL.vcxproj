@@ -141,23 +141,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Advanced Lighting\blinnPhong.frag" />
-    <None Include="Advanced Lighting\blinnPhong.vert" />
-    <None Include="Advanced Lighting\shader.frag" />
     <None Include="packages.config" />
+    <None Include="Shadow Map\blinnPhong.frag" />
+    <None Include="Shadow Map\blinnPhong.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Advanced Lighting\blinnPhong.cpp" />
-    <ClCompile Include="Advanced Lighting\Camera.cpp" />
-    <ClCompile Include="Advanced Lighting\shader.cpp" />
-    <ClCompile Include="Advanced Lighting\Texture.cpp" />
+    <ClCompile Include="Shadow Map\shadow map.cpp" />
+    <ClCompile Include="Shadow Map\Camera.cpp" />
+    <ClCompile Include="Shadow Map\shader.cpp" />
+    <ClCompile Include="Shadow Map\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Advanced Lighting\Camera.h" />
-    <ClInclude Include="Advanced Lighting\shader.h" />
+    <ClInclude Include="Shadow Map\Camera.h" />
+    <ClInclude Include="Shadow Map\shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Advanced Lighting\wood.png" />
+    <Image Include="Shadow Map\wood.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

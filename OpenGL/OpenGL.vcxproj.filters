@@ -2,13 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Advanced Lighting\blinnPhong.frag">
+    <None Include="Shadow Map\blinnPhong.frag">
       <Filter>Sources</Filter>
     </None>
-    <None Include="Advanced Lighting\blinnPhong.vert">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Advanced Lighting\shader.frag">
+    <None Include="Shadow Map\blinnPhong.vert">
       <Filter>Sources</Filter>
     </None>
   </ItemGroup>
@@ -18,29 +15,29 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Advanced Lighting\blinnPhong.cpp">
+    <ClCompile Include="Shadow Map\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced Lighting\Camera.cpp">
+    <ClCompile Include="Shadow Map\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced Lighting\shader.cpp">
+    <ClCompile Include="Shadow Map\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Advanced Lighting\Texture.cpp">
+    <ClCompile Include="Shadow Map\shadow map.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Advanced Lighting\Camera.h">
+    <ClInclude Include="Shadow Map\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Advanced Lighting\shader.h">
+    <ClInclude Include="Shadow Map\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Advanced Lighting\wood.png">
+    <Image Include="Shadow Map\wood.png">
       <Filter>Sources</Filter>
     </Image>
   </ItemGroup>
