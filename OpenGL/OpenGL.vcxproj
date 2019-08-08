@@ -142,8 +142,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Shadow Map\blinnPhong.frag" />
-    <None Include="Shadow Map\blinnPhong.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shadow Map\shadow map.cpp" />
