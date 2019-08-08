@@ -206,12 +206,20 @@ int main()
 	return 0;
 }
 
-GLuint generateDepthMap(const GLuint& shadow_width, const GLuint& shadow_height) 
+GLuint generateDepthMap(Shader& shader, const glm::vec3 lightPos, const GLfloat& near_plane = 1.0f, const GLfloat& far_plane=7.5f,const GLuint& shadow_width = 1200, const GLuint& shadow_height = 1200) 
 {
+	shader.Use();
+	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "lightProjection"), 1, GL_FALSE, glm::value_ptr(lightProjection));
+	glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(1.0f));
+	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "lightView"), 1, GL_FALSE, glm::value_ptr(lightView));
+	glm::mat4 model;
+	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "lightView"), 1, GL_FALSE, glm::value_ptr(model));
+
 	GLuint framebuffer;
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-	
+
 	GLuint depthMap;
 	glGenTextures(1, &depthMap);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
@@ -223,6 +231,8 @@ GLuint generateDepthMap(const GLuint& shadow_width, const GLuint& shadow_height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glEnable(GL_DEPTH_TEST);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
