@@ -112,7 +112,7 @@ void renderScene(Shader& shader);
 
 void renderTexture(GLuint& texture);
 
-GLuint generateDepthMap(Shader& shader, const glm::vec3 lightPos = LIGHTPOSTION, const GLfloat& near_plane = 1.0f, const GLfloat& far_plane = 7.5f, const GLuint& shadow_width = 1200, const GLuint& shadow_height = 1200);
+GLuint generateDepthMap(Shader& shader, const glm::vec3 lightPos = LIGHTPOSTION, const GLfloat& near_plane = 1.0f, const GLfloat& far_plane = 7.5f, const GLuint& shadow_width = SCR_WIDTH, const GLuint& shadow_height = SCR_HEIGHT);
 
 int main()
 {
@@ -202,8 +202,9 @@ int main()
 		*/
 		
 		GLuint depthmap = generateDepthMap(depthShader);
-
+		
 		renderTexture(depthmap);
+
 		glfwSwapBuffers(window);
 		
 	}
@@ -222,27 +223,28 @@ GLuint generateDepthMap(Shader& shader, const glm::vec3 lightPos, const GLfloat&
 	GLuint framebuffer;
 	glGenFramebuffers(1, &framebuffer);
 
-	GLuint depthMap;
-	glGenTextures(1, &depthMap);
-	glBindTexture(GL_TEXTURE_2D, depthMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadow_width, shadow_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	static GLuint depthMap;
+	if (depthMap == 0)
+	{
+		glGenTextures(1, &depthMap);
+		glBindTexture(GL_TEXTURE_2D, depthMap);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadow_width, shadow_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
 	glEnable(GL_DEPTH_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+	glClear(GL_DEPTH_BUFFER_BIT);
 	//渲染
 	renderScene(shader);
-	
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	std::cout << "DEPTH MAP: " << depthMap << std::endl;
+
 	return depthMap;
 }
 
@@ -301,11 +303,13 @@ void renderCube()
 		glGenVertexArrays(1, &cubeVAO);
 
 		GLuint cubeVBO;
-		glGenBuffers(GL_ARRAY_BUFFER, &cubeVBO);
-		glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		
 
 		glBindVertexArray(cubeVAO);
+
+		glGenBuffers(1, &cubeVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 		//position
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GL_FLOAT), (GLvoid*)0);
 		glEnableVertexAttribArray(0);
@@ -393,6 +397,7 @@ void renderScene(Shader& shader)
 void renderTexture(GLuint& texture)
 {
 	Shader screenShader("./Shadow Map/textureScreen.vert", "./Shadow Map/textureScreen.frag");
+	
 	GLfloat screenVertices[] = {
 	 -1.0f, -1.0f, 0.0f, 0.0f,
 	  1.0f, -1.0f, 1.0f, 0.0f,
@@ -422,10 +427,10 @@ void renderTexture(GLuint& texture)
 
 	glBindVertexArray(0);
 	
-	
-	
-	
+	screenShader.Use();
 	glBindVertexArray(screenVAO);
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
