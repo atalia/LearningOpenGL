@@ -8,7 +8,7 @@ out VS_OUT{
 	vec3 fragPos;
 	vec3 normal;
 	vec2 texCoords;
-	vec3 fragPosInLightSpace;
+	vec4 fragPosInLightSpace;
 }vs_out;
 
 uniform mat4 projection;
@@ -20,7 +20,7 @@ void main()
 {
 	gl_Position = projection * view * model * vec4(position, 1.0f);
 	vs_out.fragPos = vec3(model * vec4(position,1.0f));
-	vs_out.normal = normalize(transpose(inverse(mat3(model))) * normal);
+	vs_out.normal = transpose(inverse(mat3(model))) * normal;
 	vs_out.texCoords = texCoords;
-	vs_out.fragPosInLightSpace = vec3(lightSpaceMatrix * model * vec4(position, 1.0f));
+	vs_out.fragPosInLightSpace = lightSpaceMatrix * model * vec4(position, 1.0f);
 }

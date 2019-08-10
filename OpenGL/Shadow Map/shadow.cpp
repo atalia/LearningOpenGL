@@ -26,7 +26,7 @@ bool keys[1024];
 bool firstMouse = true;
 GLfloat lastX = 400;
 GLfloat lastY = 300;
-Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));//全局唯一的相机
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));//全局唯一的相机
 
 const glm::vec3 LIGHTPOSTION(-2.0f, 4.0f, -1.0f);//全局唯一灯
 
@@ -189,11 +189,12 @@ int main()
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		glClear(GL_DEPTH_BUFFER_BIT);
 		renderScene(depthShader);
+
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
+		glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 		//renderTexture(depthmap);
 		renderShadow(depthmap);
 		glfwSwapBuffers(window);
@@ -290,15 +291,23 @@ void renderShadow(GLuint shadowmap)
 	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 	
+	glUniform3f(glGetUniformLocation(shader.Program, "lightPos"), LIGHTPOSTION.x, LIGHTPOSTION.y, LIGHTPOSTION.z);
+	glm::vec3 cameraPos = camera.getCameraPos();
+	glUniform3f(glGetUniformLocation(shader.Program, "viewPos"), cameraPos.x, cameraPos.y, cameraPos.z);
+
 	GLuint woodTexture;
 	woodTexture = load2DTexture("./Shadow Map/wood.png");
 	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, woodTexture);
+	glUniform1i(glGetUniformLocation(shader.Program, "diffuseTexture"), 0);
+	//glBindTexture(GL_TEXTURE_2D, shadowmap);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, shadowmap);
+	glUniform1i(glGetUniformLocation(shader.Program, "shadowMap"), 1);
 	
 	renderScene(shader);
+	//renderTexture(shadowmap);
 	
 }
 
