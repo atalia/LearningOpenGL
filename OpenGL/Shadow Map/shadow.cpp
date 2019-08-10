@@ -19,14 +19,16 @@ const int SHADOW_HEIGHT = 1024;
 const int VERSION_MINOR = 3;
 const int VERSION_MAJOR = 3;
 
+GLfloat near_plane = 1.0f, far_plane = 7.5f;
+
 bool keys[1024];
 
 bool firstMouse = true;
 GLfloat lastX = 400;
 GLfloat lastY = 300;
-Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));//ÂÖ®Â±ÄÂîØ‰∏ÄÁöÑÁõ∏Êú∫
+Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));//»´æ÷Œ®“ªµƒœ‡ª˙
 
-const glm::vec3 LIGHTPOSTION(-2.0f, 4.0f, -1.0f);//ÂÖ®Â±ÄÂîØ‰∏ÄÁÅØ
+const glm::vec3 LIGHTPOSTION(-2.0f, 4.0f, -1.0f);//»´æ÷Œ®“ªµ∆
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -36,7 +38,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	if (key == GLFW_KEY_B)
 	{
-		if(action == GLFW_PRESS)
+		if (action == GLFW_PRESS)
 		{
 			if (keys[key])
 			{
@@ -120,6 +122,8 @@ GLuint generateDepthFramebuffer();
 
 GLuint generateDepthmap(const GLuint& shadow_width = SHADOW_WIDTH, const GLuint& shadow_height = SHADOW_HEIGHT);
 
+void renderShadow(GLuint shadowmap);
+
 int main()
 {
 	glfwInit();
@@ -129,7 +133,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	//MULTISAMPLES
 	glfwWindowHint(GLFW_SAMPLES, 8);
-	
+
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Shadow Map", NULL, NULL);
 	if (window == NULL)
 	{
@@ -142,7 +146,7 @@ int main()
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetScrollCallback(window, scroll_callback);
 	glewExperimental = GL_TRUE;
-	
+
 	if (glewInit() != GLEW_OK)
 	{
 		std::cout << "GLEW INIT FAILURE" << std::endl;
@@ -152,48 +156,48 @@ int main()
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 	glEnable(GL_DEPTH_TEST);
-	
+
 
 	Shader depthShader("./Shadow Map/depthmap.vert", "./Shadow Map/depthmap.frag");
 
-	GLuint floorTexture;
-	floorTexture = load2DTexture("./Shadow Map/wood.png");
 	
+
 	//code start
+	//Shader Map Generate
 	GLuint depthmap = generateDepthmap();
 	GLuint framebuffer = generateDepthFramebuffer();
-	GLfloat near_plane = 1.0f, far_plane = 7.5f;
+	
 
 	depthShader.Use();
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 	glm::mat4 lightView = glm::lookAt(LIGHTPOSTION, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f));
 	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 	glUniformMatrix4fv(glGetUniformLocation(depthShader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-	
+
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
+
 		
-		/*
 		GLfloat currentTime = glfwGetTime();
 		GLfloat deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
-		move(camera, deltaTime); 
-		*/
+		move(camera, deltaTime);
+		
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-			glClear(GL_DEPTH_BUFFER_BIT);
-			renderScene(depthShader);
+		glClear(GL_DEPTH_BUFFER_BIT);
+		renderScene(depthShader);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
-		renderTexture(depthmap);
-
+		//renderTexture(depthmap);
+		renderShadow(depthmap);
 		glfwSwapBuffers(window);
-		
+
 	}
 	glfwTerminate();
 	return 0;
@@ -201,7 +205,7 @@ int main()
 
 GLuint generateDepthFramebuffer()
 {
-	
+
 	GLuint framebuffer;
 	glGenFramebuffers(1, &framebuffer);
 	GLuint depthMap = generateDepthmap();
@@ -215,7 +219,7 @@ GLuint generateDepthFramebuffer()
 	return framebuffer;
 }
 
-//ÁîüÊàêdepthMap
+//…˙≥…depthMap
 GLuint generateDepthmap(const GLuint& shadow_width, const GLuint& shadow_height)
 {
 	static GLuint depthMap;
@@ -234,7 +238,7 @@ GLuint generateDepthmap(const GLuint& shadow_width, const GLuint& shadow_height)
 }
 
 
-//ÁîªÂú∫ÊôØ
+//ª≠≥°æ∞
 void renderScene(Shader& shader)
 {
 	shader.Use();
@@ -242,9 +246,9 @@ void renderScene(Shader& shader)
 	glm::mat4 model(1.0f);
 	model = glm::translate(model, FLOORPOSITION);
 	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-	
+
 	renderFloor();
-	
+
 	const glm::vec3 CUBEPOSITION[] = {
 		glm::vec3(0.0f, 1.5f, 0.0),
 		glm::vec3(2.0f, 0.0f, 1.0),
@@ -270,7 +274,35 @@ void renderScene(Shader& shader)
 
 }
 
-//Ê∏≤ÊüìTextureËá≥Â±èÂπï
+void renderShadow(GLuint shadowmap)
+{
+	
+	Shader shader("./Shadow Map/shader.vert", "./Shadow Map/shader.frag");
+	shader.Use();
+	glm::mat4 projection = glm::perspective(camera.getZoom(), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+	glm::mat4 view = camera.getView();
+	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+
+	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+	glm::mat4 lightView = glm::lookAt(LIGHTPOSTION, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f));
+	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+	
+	GLuint woodTexture;
+	woodTexture = load2DTexture("./Shadow Map/wood.png");
+	
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, woodTexture);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, shadowmap);
+	
+	renderScene(shader);
+	
+}
+
+//‰÷»æTexture÷¡∆¡ƒª
 void renderTexture(GLuint& texture)
 {
 	static GLuint screenVAO;
@@ -288,7 +320,7 @@ void renderTexture(GLuint& texture)
 		GLuint screenVBO;
 		glGenBuffers(1, &screenVBO);
 		glGenVertexArrays(1, &screenVAO);
-		
+
 		glBindVertexArray(screenVAO);
 
 		glBindBuffer(GL_ARRAY_BUFFER, screenVBO);
@@ -312,12 +344,12 @@ void renderTexture(GLuint& texture)
 	glUniform1i(glGetUniformLocation(screenShader.Program, "screenTexture"), 0);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	
+
 	glBindVertexArray(0);
-	
+
 }
 
-//ÁîªÁÆ±Â≠ê
+//ª≠œ‰◊”
 void renderCube()
 {
 	static GLuint cubeVAO;
@@ -394,7 +426,7 @@ void renderCube()
 	glBindVertexArray(0);
 }
 
-//ÁîªÂú∞Êùø
+//ª≠µÿ∞Â
 void renderFloor()
 {
 	static GLuint floorVAO;

@@ -144,9 +144,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Shadow Map\shadow map.cpp" />
     <ClCompile Include="Shadow Map\Camera.cpp" />
     <ClCompile Include="Shadow Map\shader.cpp" />
+    <ClCompile Include="Shadow Map\shadow.cpp" />
     <ClCompile Include="Shadow Map\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>

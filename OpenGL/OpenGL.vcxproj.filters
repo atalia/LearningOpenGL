@@ -18,7 +18,7 @@
     <ClCompile Include="Shadow Map\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Shadow Map\shadow map.cpp">
+    <ClCompile Include="Shadow Map\shadow.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

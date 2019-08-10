@@ -13,5 +13,6 @@ uniform sampler2D screenTexture;
 
 void main()
 {
-	color = texture(screenTexture, fs_in.texCoord);
+	float depthValue = texture(screenTexture, fs_in.texCoord).r;
+	color = vec4(vec3(depthValue), 1.0f);
 }
