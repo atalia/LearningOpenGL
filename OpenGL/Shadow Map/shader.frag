@@ -15,14 +15,26 @@ uniform sampler2D shadowMap;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
-float calculateShadow()
+
+float calculateShadow(float bias)
 {
+	
 	vec3 projCoords = fs_in.fragPosInLightSpace.xyz/fs_in.fragPosInLightSpace.w;
 	//fs_in.fragPosInLightSpace.xy NDC
 	projCoords = projCoords.xyz * 0.5 + 0.5;
-	float depthValueInShadowmap = texture(shadowMap, projCoords.xy).r;
-	float shadow = projCoords.z <= depthValueInShadowmap ? 0.0f : 1.0f;
-	return shadow;
+	
+	float shadow = 0.0f;
+	vec2 texelSize = 1.0f/textureSize(shadowMap, 0);
+	for(int x = -1; x <= 1; ++x)
+		for(int y = -1; y <=1; ++y)
+		{
+			float depthValueInShadowmap = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+			shadow += projCoords.z <= depthValueInShadowmap + bias ? 0.0f : 1.0f;
+		}
+	// projCoords可能会出现大于1.0f的情况，而shadowmap经过裁剪，值在[-1.0f,1.0f]
+	if(projCoords.z > 1.0f)
+	 	shadow = 0.0f;
+	return shadow /= 9.0f;
 }
 
 void main()
@@ -45,12 +57,11 @@ void main()
 
 	vec3 specular = spec * lightColor * baseColor;
 
-	float shadow = calculateShadow();
+	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+	//float bias = 0.0f;
+	float shadow = calculateShadow(bias);
 
 	vec3 light = ambient + (1.0f - shadow) * (diffuse + specular);
 
 	color = vec4(light , 1.0f);
-	//color = texture(diffuseTexture, fs_in.texCoords);
-	//color = mix(texture(shadowMap, fs_in.texCoords), texture(diffuseTexture, fs_in.texCoords), 0.5);
-	//color = vec4(0.5f, 0.5f, 0.5f, 0.5f);
 }

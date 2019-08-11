@@ -122,7 +122,7 @@ GLuint generateDepthFramebuffer();
 
 GLuint generateDepthmap(const GLuint& shadow_width = SHADOW_WIDTH, const GLuint& shadow_height = SHADOW_HEIGHT);
 
-void renderShadow(GLuint shadowmap);
+void renderShadow(Shader&, GLuint shadowmap);
 
 int main()
 {
@@ -159,7 +159,8 @@ int main()
 
 
 	Shader depthShader("./Shadow Map/depthmap.vert", "./Shadow Map/depthmap.frag");
-
+	Shader shader("./Shadow Map/shader.vert", "./Shadow Map/shader.frag");
+	Shader screenShader("./Shadow Map/textureScreen.vert", "./Shadow Map/textureScreen.frag");
 	
 
 	//code start
@@ -188,15 +189,20 @@ int main()
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		glClear(GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_CULL_FACE);
+		
+		//glFrontFace(GL_CCW);
+		//glCullFace(GL_FRONT);
 		renderScene(depthShader);
-
+		//glCullFace(GL_BACK);
+		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 		//renderTexture(depthmap);
-		renderShadow(depthmap);
+		renderShadow(shader, depthmap);
 		glfwSwapBuffers(window);
 
 	}
@@ -229,11 +235,13 @@ GLuint generateDepthmap(const GLuint& shadow_width, const GLuint& shadow_height)
 		glGenTextures(1, &depthMap);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadow_width, shadow_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glm::vec4 boardcolor(1.0f, 1.0f, 1.0f, 1.0f);
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(boardcolor));
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	}
 	return depthMap;
 }
@@ -275,10 +283,9 @@ void renderScene(Shader& shader)
 
 }
 
-void renderShadow(GLuint shadowmap)
+void renderShadow(Shader& shader, GLuint shadowmap)
 {
 	
-	Shader shader("./Shadow Map/shader.vert", "./Shadow Map/shader.frag");
 	shader.Use();
 	glm::mat4 projection = glm::perspective(camera.getZoom(), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -312,7 +319,7 @@ void renderShadow(GLuint shadowmap)
 }
 
 //‰÷»æTexture÷¡∆¡ƒª
-void renderTexture(GLuint& texture)
+void renderTexture(Shader& screenShader, GLuint& texture)
 {
 	static GLuint screenVAO;
 	if (screenVAO == 0) {
@@ -342,7 +349,7 @@ void renderTexture(GLuint& texture)
 
 		glBindVertexArray(0);
 	}
-	Shader screenShader("./Shadow Map/textureScreen.vert", "./Shadow Map/textureScreen.frag");
+	
 	screenShader.Use();
 	glBindVertexArray(screenVAO);
 
