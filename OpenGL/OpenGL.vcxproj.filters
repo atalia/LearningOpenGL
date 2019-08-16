@@ -26,13 +26,13 @@
     <ClCompile Include="Normal Mapping\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Normal Mapping\Normal Mapping.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Normal Mapping\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Normal Mapping\Texture.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Normal Mapping\Normal Mapping.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
