@@ -26,7 +26,6 @@ Camera camera(glm::vec3(0.0f, 1.0f, 3.0f));//全局唯一的相机
 
 const glm::vec3 LIGHTPOSTION(0.5f, 1.0f, 0.3f);//全局唯一灯
 const glm::vec3 LIGHTCOLOR(1.0f, 1.0f, 1.0f);
-GLfloat height_scale = 0.1f;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -120,7 +119,7 @@ int main()
 	//MULTISAMPLES
 	glfwWindowHint(GLFW_SAMPLES, 8);
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Parallax Mapping", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Normal Map in WORLD", NULL, NULL);
 	if (window == NULL)
 	{
 		glfwTerminate();
@@ -144,21 +143,12 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	//Shader shader("./Normal Mapping/worldshader.vert","./Normal Mapping/worldshader.frag");
-	Shader shader("./Parallax Mapping/tbnshader.vert", "./Parallax Mapping/tbnshader.frag");
-	//GLuint diffuseTexture = load2DTexture("./Parallax Mapping/bricks.jpg");
-	//GLuint normalTexture = load2DTexture("./Parallax Mapping/bricks_normal.jpg");
-	//GLuint parallaxTexture = load2DTexture("./Parallax Mapping/bricks_disp.jpg");
-	GLuint diffuseTexture = load2DTexture("./Parallax Mapping/wood.png");
-	GLuint normalTexture = load2DTexture("./Parallax Mapping/toy_box_normal.png");
-	GLuint parallaxTexture = load2DTexture("./Parallax Mapping/toy_box_disp.png");
-
+	Shader shader("./Normal Mapping/tbnshader.vert", "./Normal Mapping/tbnshader.frag");
+	GLuint diffuseTexture = load2DTexture("./Normal Mapping/brickwall.jpg");
+	GLuint normalTexture = load2DTexture("./Normal Mapping/brickwall_normal.jpg");
 	shader.Use();
 	glUniform3f(glGetUniformLocation(shader.Program, "lightPos"), LIGHTPOSTION.x, LIGHTPOSTION.y, LIGHTPOSTION.z);
 	glUniform3f(glGetUniformLocation(shader.Program, "lightColor"), LIGHTCOLOR.x, LIGHTCOLOR.y, LIGHTCOLOR.z);
-	glUniform1f(glGetUniformLocation(shader.Program, "height_scale"), height_scale);
-	glUniform1i(glGetUniformLocation(shader.Program, "diffuseTexture"), 0);
-	glUniform1i(glGetUniformLocation(shader.Program, "normalTexture"), 1);
-	glUniform1i(glGetUniformLocation(shader.Program, "parallaxTexture"), 2);
 
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
@@ -173,8 +163,8 @@ int main()
 		move(camera, deltaTime);
 		
 		glm::mat4 model(1.0f);
-		//model = glm::rotate(model, sin(currentTime), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(-45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, sin(currentTime), glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		glm::mat4 projection = glm::perspective(camera.getZoom(), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
 
 		shader.Use();
@@ -183,14 +173,17 @@ int main()
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.getView()));
 		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-		
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseTexture);
+		glUniform1i(glGetUniformLocation(shader.Program, "diffuseTexture"), 0);
+
+		
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, normalTexture);
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, parallaxTexture);
+		glUniform1i(glGetUniformLocation(shader.Program, "normalTexture"), 1);
+
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 		renderQuad();
 		glfwSwapBuffers(window);
 
