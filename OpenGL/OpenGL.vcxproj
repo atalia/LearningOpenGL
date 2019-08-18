@@ -141,23 +141,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Normal Mapping\shader.frag" />
-    <None Include="Normal Mapping\shader.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Normal Mapping\brickwall.jpg" />
-    <Image Include="Normal Mapping\brickwall_normal.jpg" />
+    <ClCompile Include="HDR\Camera.cpp" />
+    <ClCompile Include="HDR\HDR.cpp" />
+    <ClCompile Include="HDR\shader.cpp" />
+    <ClCompile Include="HDR\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Normal Mapping\Camera.cpp" />
-    <ClCompile Include="Normal Mapping\Normal Mapping.cpp" />
-    <ClCompile Include="Normal Mapping\shader.cpp" />
-    <ClCompile Include="Normal Mapping\Texture.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Normal Mapping\Camera.h" />
-    <ClInclude Include="Normal Mapping\shader.h" />
+    <ClInclude Include="HDR\Camera.h" />
+    <ClInclude Include="HDR\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

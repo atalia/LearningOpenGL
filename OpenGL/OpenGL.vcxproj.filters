@@ -2,12 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Normal Mapping\shader.frag">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Normal Mapping\shader.vert">
-      <Filter>Sources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -15,32 +9,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Normal Mapping\brickwall.jpg">
-      <Filter>Sources</Filter>
-    </Image>
-    <Image Include="Normal Mapping\brickwall_normal.jpg">
-      <Filter>Sources</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Normal Mapping\Camera.cpp">
+    <ClCompile Include="HDR\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Normal Mapping\shader.cpp">
+    <ClCompile Include="HDR\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Normal Mapping\Texture.cpp">
+    <ClCompile Include="HDR\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Normal Mapping\Normal Mapping.cpp">
+    <ClCompile Include="HDR\HDR.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Normal Mapping\Camera.h">
+    <ClInclude Include="HDR\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Normal Mapping\shader.h">
+    <ClInclude Include="HDR\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
