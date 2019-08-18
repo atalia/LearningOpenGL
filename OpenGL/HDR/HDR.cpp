@@ -14,8 +14,8 @@
 
 extern GLuint load2DTexture(const std::string filepath);
 
-const int SCR_WIDTH = 800;
-const int SCR_HEIGHT = 600;
+const int SCR_WIDTH = 1200;
+const int SCR_HEIGHT = 720;
 const int SHADOW_WIDTH = 1024;
 const int SHADOW_HEIGHT = 1024;
 
@@ -27,8 +27,8 @@ bool keys[1024];
 bool firstMouse = true;
 GLfloat lastX = 400;
 GLfloat lastY = 300;
-Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));//È«¾ÖÎ¨Ò»µÄÏà»ú
-
+Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));//å…¨å±€å”¯ä¸€çš„ç›¸æœº
+GLfloat exposure = 1.0f;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -36,18 +36,20 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	if (key == GLFW_KEY_B)
+	if (key == GLFW_KEY_Q)
 	{
 		if (action == GLFW_PRESS)
 		{
-			if (keys[key])
-			{
-				keys[key] = false;
-			}
-			else
-			{
-				keys[key] = true;
-			}
+			exposure += 0.05f;
+			std::cout << "current exposure value: "<< exposure << std::endl;
+		}
+	}
+	if (key == GLFW_KEY_E)
+	{
+		if (action == GLFW_PRESS)
+		{
+			exposure -= 0.05f;
+			std::cout << "current exposure value: " << exposure << std::endl;
 		}
 	}
 	else if (key > 0 && key < 1024)
@@ -126,7 +128,7 @@ int main()
 	//MULTISAMPLES
 	glfwWindowHint(GLFW_SAMPLES, 8);
 
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Shadow Map", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "HDR", NULL, NULL);
 	if (window == NULL)
 	{
 		glfwTerminate();
@@ -200,7 +202,7 @@ int main()
 	for (int i = 0; i < lightPositions.size(); ++i)
 	{
 		std::stringstream ss;
-		ss.str("");//ss.clear() ÓÐ¿Ó
+		ss.str("");//ss.clear() æœ‰å‘
 		ss << "lights[" << i <<"].Position";
 		glUniform3fv(glGetUniformLocation(lightShader.Program, ss.str().c_str()), 1, glm::value_ptr(lightPositions[i]));
 		//glUniform3fv(glGetUniformLocation(lightShader.Program, std::string("lights[" + std::to_string(i) + "].Position").c_str()), 1, glm::value_ptr(lightPositions[i]));
@@ -233,7 +235,7 @@ int main()
 		view = glm::rotate(view, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
+		
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, wood);
 		renderCube();
@@ -244,7 +246,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		hdrShader.Use();
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0); 
+		glUniform1f(glGetUniformLocation(hdrShader.Program, "exposure"), exposure);
 		glBindTexture(GL_TEXTURE_2D, hdrColor);
 		renderTexture();
 		
@@ -256,7 +259,7 @@ int main()
 }
 
 
-//äÖÈ¾TextureÖÁÆÁÄ»
+//æ¸²æŸ“Textureè‡³å±å¹•
 void renderTexture()
 {
 	static GLuint screenVAO;
@@ -298,7 +301,7 @@ void renderTexture()
 
 }
 
-//»­Ïä×Ó
+//ç”»ç®±å­
 void renderCube()
 {
 	static GLuint cubeVAO;
