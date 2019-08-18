@@ -141,6 +141,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="HDR\hdr.frag" />
+    <None Include="HDR\hdr.vert" />
+    <None Include="HDR\lighting.frag" />
+    <None Include="HDR\lighting.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +156,9 @@
   <ItemGroup>
     <ClInclude Include="HDR\Camera.h" />
     <ClInclude Include="HDR\shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="HDR\wood.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

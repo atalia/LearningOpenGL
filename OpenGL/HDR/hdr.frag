@@ -10,5 +10,9 @@ uniform sampler2D screenTexture;
 
 void main()
 {
-	color = texture(screenTexture, fs_in.texCoords);
+	const float gamma = 2.2f;
+	vec3 colorbase = texture(screenTexture, fs_in.texCoords).rgb;
+	vec3 mapped = colorbase / (colorbase + vec3(1.0f));
+	mapped = pow(mapped, vec3(1.0f/gamma));
+	color = vec4(mapped,1.0f);
 }

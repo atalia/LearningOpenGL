@@ -17,13 +17,13 @@ uniform sampler2D diffuseTexture;
 
 void main()
 {
-	vec3 baseColor = vec3(texture(diffuseTexture, fs_in.texCoord));
-	vec3 ambient = 0.05 * baseColor;
+	vec3 baseColor = texture(diffuseTexture, fs_in.texCoord).rgb;
+	vec3 ambient = 0.00 * baseColor;
+	vec3 normal = normalize(fs_in.normal);
 	vec3 lighting  = vec3(0.0f);
 	for(int i = 0; i < 4; ++i)
 	{
 		vec3 lightDir = normalize(lights[i].Position - fs_in.fragPos);
-		vec3 normal = normalize(fs_in.normal);
 		float diff = max(dot(lightDir, normal), 0.0f);
 		vec3 diffuse = lights[i].Color * diff * baseColor;
 		vec3 result = diffuse;

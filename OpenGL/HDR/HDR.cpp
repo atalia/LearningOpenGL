@@ -27,7 +27,7 @@ bool keys[1024];
 bool firstMouse = true;
 GLfloat lastX = 400;
 GLfloat lastY = 300;
-Camera camera(glm::vec3(0.0f, 0.0f, 4.0f));//全局唯一的相机
+Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));//全局唯一的相机
 
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -220,7 +220,7 @@ int main()
 		lastTime = currentTime;
 		move(camera, deltaTime);
 
-		//glBindFramebuffer(GL_FRAMEBUFFER, hdrfbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, hdrfbo);
 		glClearColor(0.5, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		lightShader.Use();
@@ -229,13 +229,15 @@ int main()
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 25.0));
 		model = glm::scale(model, glm::vec3(2.5f, 2.5f, 27.5f));
 		glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(camera.getView()));
+		glm::mat4 view = camera.getView();
+		view = glm::rotate(view, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, wood);
 		renderCube();
-		/*
+		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glClearColor(0.5, 0.5f, 0.5f, 1.0f);
@@ -245,7 +247,7 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, hdrColor);
 		renderTexture();
-		*/
+		
 		glfwSwapBuffers(window);
 
 	}

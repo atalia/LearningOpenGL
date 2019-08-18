@@ -2,6 +2,18 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="HDR\hdr.frag">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="HDR\hdr.vert">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="HDR\lighting.frag">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="HDR\lighting.vert">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -29,5 +41,10 @@
     <ClInclude Include="HDR\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="HDR\wood.png">
+      <Filter>Sources</Filter>
+    </Image>
   </ItemGroup>
 </Project>
