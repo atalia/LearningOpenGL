@@ -141,24 +141,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="HDR\hdr.frag" />
-    <None Include="HDR\hdr.vert" />
-    <None Include="HDR\lighting.frag" />
-    <None Include="HDR\lighting.vert" />
+    <None Include="Bloom\lighting.frag" />
+    <None Include="Bloom\lighting.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="HDR\Camera.cpp" />
-    <ClCompile Include="HDR\HDR.cpp" />
-    <ClCompile Include="HDR\shader.cpp" />
-    <ClCompile Include="HDR\Texture.cpp" />
+    <ClCompile Include="Bloom\Camera.cpp" />
+    <ClCompile Include="Bloom\Bloom.cpp" />
+    <ClCompile Include="Bloom\shader.cpp" />
+    <ClCompile Include="Bloom\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HDR\Camera.h" />
-    <ClInclude Include="HDR\shader.h" />
+    <ClInclude Include="Bloom\Camera.h" />
+    <ClInclude Include="Bloom\shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="HDR\wood.png" />
+    <Image Include="Bloom\container_diffuse.png" />
+    <Image Include="Bloom\wood.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,16 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="HDR\hdr.frag">
+    <None Include="Bloom\lighting.frag">
       <Filter>Sources</Filter>
     </None>
-    <None Include="HDR\hdr.vert">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="HDR\lighting.frag">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="HDR\lighting.vert">
+    <None Include="Bloom\lighting.vert">
       <Filter>Sources</Filter>
     </None>
   </ItemGroup>
@@ -21,29 +15,32 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="HDR\Camera.cpp">
+    <ClCompile Include="Bloom\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="HDR\shader.cpp">
+    <ClCompile Include="Bloom\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="HDR\Texture.cpp">
+    <ClCompile Include="Bloom\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="HDR\HDR.cpp">
+    <ClCompile Include="Bloom\Bloom.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HDR\Camera.h">
+    <ClInclude Include="Bloom\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="HDR\shader.h">
+    <ClInclude Include="Bloom\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="HDR\wood.png">
+    <Image Include="Bloom\container_diffuse.png">
+      <Filter>Sources</Filter>
+    </Image>
+    <Image Include="Bloom\wood.png">
       <Filter>Sources</Filter>
     </Image>
   </ItemGroup>
