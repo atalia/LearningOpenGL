@@ -136,6 +136,9 @@ int main()
 
 	GLuint wood = load2DTexture("./Bloom/wood.png");
 	GLuint container = load2DTexture("./Bloom/container_diffuse.png");
+	//Texture Shader
+	Shader hdrShader("./Bloom/hdr.vert", "./Bloom/hdr.frag");
+
 	//灯Shader
 	Shader lightShader("./Bloom/lightcube.vert", "./Bloom/lightcube.frag");
 
@@ -167,8 +170,29 @@ int main()
 		glUniform3fv(glGetUniformLocation(lightingShader.Program, ss.str().c_str()), 1, glm::value_ptr(lightColors[i]));
 	}
 
-
-
+	GLuint hdrfbo;
+	glGenFramebuffers(1, &hdrfbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, hdrfbo);
+	GLuint colorbufferTexture[2];
+	glGenTextures(2, colorbufferTexture);
+	for (int i = 0; i < 2; ++i)
+	{
+		glBindTexture(GL_TEXTURE_2D, colorbufferTexture[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, colorbufferTexture[i], 0);
+	}
+	GLuint depthrbo;
+	glGenRenderbuffers(1, &depthrbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, depthrbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, SCR_WIDTH, SCR_WIDTH);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrbo);
+	GLuint colorbuffer[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+	glDrawBuffers(2, colorbuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
@@ -178,6 +202,8 @@ int main()
 		GLfloat deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
 		move(camera, deltaTime);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, hdrfbo);
 		glm::mat4 projection = glm::perspective(camera.getZoom(), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 		glm::mat4 view = camera.getView();
 		glm::mat4 model(1.0f);
@@ -244,7 +270,16 @@ int main()
 		model = glm::scale(model, glm::vec3(0.5f));
 		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		renderCube();
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		hdrShader.Use();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, colorbufferTexture[0]);
+		renderTexture();
+		
 		glfwSwapBuffers(window);
 
 	}
