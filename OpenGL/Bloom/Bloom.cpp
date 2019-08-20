@@ -220,7 +220,7 @@ int main()
 			model = glm::translate(model, lightPositions[i]);
 			model = glm::scale(model, glm::vec3(0.25f));
 			glUniformMatrix4fv(glGetUniformLocation(lightShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-			glUniform3fv(glGetUniformLocation(lightShader.Program,"cubecolor"), 1, glm::value_ptr(lightColors[i]));
+			glUniform3fv(glGetUniformLocation(lightShader.Program,"cubeColor"), 1, glm::value_ptr(lightColors[i]));
 			renderCube();
 		}
 
@@ -242,6 +242,12 @@ int main()
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
+		model = glm::scale(model, glm::vec3(0.5f));
+		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+		renderCube();
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 1.0));
 		model = glm::scale(model, glm::vec3(0.5f));
 		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		renderCube();
@@ -277,7 +283,7 @@ int main()
 		
 		hdrShader.Use();
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, colorbufferTexture[0]);
+		glBindTexture(GL_TEXTURE_2D, colorbufferTexture[1]);
 		renderTexture();
 		
 		glfwSwapBuffers(window);
