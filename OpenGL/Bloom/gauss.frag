@@ -6,17 +6,32 @@ in VS_OUT{
 
 out vec4 color;
 
+uniform bool horizontal;
+
 uniform sampler2D screenTexture;
 
 uniform float weight[5] = float[](0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
 
 void main()
 {
-	vec3 colorbase = texture(screenTexture, fs_in.texCoords).rgb;
-    vec2 texOffset = 1/ textureSize(screenTexture, 0);
-    for(int i = 0; i< 5;++i)
+	vec3 result = weight[0] * texture(screenTexture, fs_in.texCoords).rgb;
+    vec2 texOffset = 1.0 / textureSize(screenTexture, 0);
+    if(horizontal)
     {
-        
+        for(int i = 1; i < 5; ++i)
+        {
+            result += weight[i] * texture(screenTexture, fs_in.texCoords + vec2(i * texOffset.x, 0)).rgb;
+            result += weight[i] * texture(screenTexture, fs_in.texCoords - vec2(i * texOffset.x, 0)).rgb;
+        }
     }
-	color = vec4(colorbase, 1.0f);
+    else
+    {
+         for(int i = 1; i < 5; ++i)
+        {
+            result += weight[i] * texture(screenTexture, fs_in.texCoords + vec2(0, i * texOffset.y)).rgb;
+            result += weight[i] * texture(screenTexture, fs_in.texCoords - vec2(0, i * texOffset.y)).rgb;
+        }
+    }
+	color = vec4(result, 1.0f);
+    //color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 }

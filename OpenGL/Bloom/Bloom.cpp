@@ -28,6 +28,8 @@ bool firstMouse = true;
 GLfloat lastX = (float)SCR_WIDTH / 2;
 GLfloat lastY = (float)SCR_HEIGHT/ 2;
 Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));//全局唯一的相机
+GLfloat exposure = 1.0f;
+bool bloom = true;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -35,7 +37,30 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-
+	else if (key == GLFW_KEY_Q)
+	{
+		if (action == GLFW_PRESS)
+		{
+			exposure *= 1.05f;
+			std::cout << "current exposure value: " << exposure << std::endl;
+		}
+	}
+	else if (key == GLFW_KEY_E)
+	{
+		if (action == GLFW_PRESS)
+		{
+			exposure *= 0.95f;
+			std::cout << "current exposure value: " << exposure << std::endl;
+		}
+	}
+	else if (key == GLFW_KEY_B)
+	{
+		if (action == GLFW_PRESS)
+		{
+			bloom = !bloom;
+			std::cout << "bloom: " << bloom << std::endl;
+		}
+	}
 	else if (key > 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)
@@ -138,10 +163,11 @@ int main()
 	GLuint container = load2DTexture("./Bloom/container_diffuse.png");
 	//Texture Shader
 	Shader hdrShader("./Bloom/hdr.vert", "./Bloom/hdr.frag");
-
+	hdrShader.Use();
+	glUniform1i(glGetUniformLocation(hdrShader.Program, "screenTexture"), 0);
+	glUniform1i(glGetUniformLocation(hdrShader.Program, "BrightTexture"), 1);
 	//灯Shader
 	Shader lightShader("./Bloom/lightcube.vert", "./Bloom/lightcube.frag");
-
 
 	//光照Shader
 	Shader lightingShader("./Bloom/lighting.vert", "./Bloom/lighting.frag");
@@ -170,6 +196,10 @@ int main()
 		glUniform3fv(glGetUniformLocation(lightingShader.Program, ss.str().c_str()), 1, glm::value_ptr(lightColors[i]));
 	}
 
+	Shader gaussShader("./Bloom/hdr.vert", "./Bloom/gauss.frag");
+	gaussShader.Use();
+	glUniform1i(glGetUniformLocation(gaussShader.Program, "screenTexture"), 0);
+
 	GLuint hdrfbo;
 	glGenFramebuffers(1, &hdrfbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, hdrfbo);
@@ -192,7 +222,30 @@ int main()
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrbo);
 	GLuint colorbuffer[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
 	glDrawBuffers(2, colorbuffer);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "Framebuffer not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	GLuint gaussfbo[2];
+	GLuint gaussColorTexture[2];
+	glGenTextures(2, gaussColorTexture);
+	glGenFramebuffers(2, gaussfbo);
+	for (int i = 0; i < 2; ++i)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, gaussfbo[i]);
+		glBindTexture(GL_TEXTURE_2D, gaussColorTexture[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gaussColorTexture[i], 0);
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			std::cout << "Framebuffer not complete!" << std::endl;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
@@ -276,14 +329,36 @@ int main()
 		model = glm::scale(model, glm::vec3(0.5f));
 		glUniformMatrix4fv(glGetUniformLocation(lightingShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
 		renderCube();
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		
+		
+		//gauss 处理
+		bool firstIterator = true;
+		for (int i = 0; i < 10; ++i)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, gaussfbo[i & 0x1]);
+			glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			gaussShader.Use();
+			glActiveTexture(GL_TEXTURE0);
+			glUniform1i(glGetUniformLocation(gaussShader.Program, "horizontal"), i & 0x1);
+			glBindTexture(GL_TEXTURE_2D, firstIterator ? colorbufferTexture[1]: gaussColorTexture[(i+1)&0x01]);
+			firstIterator = false;
+			renderTexture();
+		}
+		
+		//桌面显示
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		hdrShader.Use();
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, colorbufferTexture[1]);
+		glBindTexture(GL_TEXTURE_2D, colorbufferTexture[0]);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, gaussColorTexture[1]);
+		glUniform1f(glGetUniformLocation(hdrShader.Program, "exposure"), exposure);
+		glUniform1i(glGetUniformLocation(hdrShader.Program, "bloom"), bloom);
 		renderTexture();
 		
 		glfwSwapBuffers(window);
