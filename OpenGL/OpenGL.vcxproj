@@ -144,7 +144,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Deferred Shading\Bloom.cpp" />
+    <ClCompile Include="Deferred Shading\deferred shading.cpp" />
     <ClCompile Include="Deferred Shading\Camera.cpp" />
     <ClCompile Include="Deferred Shading\shader.cpp" />
     <ClCompile Include="Deferred Shading\Texture.cpp" />

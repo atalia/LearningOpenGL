@@ -9,9 +9,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Deferred Shading\Bloom.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Deferred Shading\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -19,6 +16,9 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Deferred Shading\Texture.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Deferred Shading\deferred shading.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
