@@ -141,23 +141,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="Bloom\lighting.frag" />
-    <None Include="Bloom\lighting.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bloom\Camera.cpp" />
-    <ClCompile Include="Bloom\Bloom.cpp" />
-    <ClCompile Include="Bloom\shader.cpp" />
-    <ClCompile Include="Bloom\Texture.cpp" />
+    <ClCompile Include="Deferred Shading\Bloom.cpp" />
+    <ClCompile Include="Deferred Shading\Camera.cpp" />
+    <ClCompile Include="Deferred Shading\shader.cpp" />
+    <ClCompile Include="Deferred Shading\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bloom\Camera.h" />
-    <ClInclude Include="Bloom\shader.h" />
+    <ClInclude Include="Deferred Shading\Camera.h" />
+    <ClInclude Include="Deferred Shading\shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Bloom\container_diffuse.png" />
-    <Image Include="Bloom\wood.png" />
+    <Image Include="Deferred Shading\container_diffuse.png" />
+    <Image Include="Deferred Shading\wood.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

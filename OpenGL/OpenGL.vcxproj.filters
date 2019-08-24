@@ -2,12 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Bloom\lighting.frag">
-      <Filter>Sources</Filter>
-    </None>
-    <None Include="Bloom\lighting.vert">
-      <Filter>Sources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -15,32 +9,32 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bloom\Camera.cpp">
+    <ClCompile Include="Deferred Shading\Bloom.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Bloom\shader.cpp">
+    <ClCompile Include="Deferred Shading\Camera.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Bloom\Texture.cpp">
+    <ClCompile Include="Deferred Shading\shader.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Bloom\Bloom.cpp">
+    <ClCompile Include="Deferred Shading\Texture.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bloom\Camera.h">
+    <ClInclude Include="Deferred Shading\Camera.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Bloom\shader.h">
+    <ClInclude Include="Deferred Shading\shader.h">
       <Filter>Sources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Bloom\container_diffuse.png">
+    <Image Include="Deferred Shading\container_diffuse.png">
       <Filter>Sources</Filter>
     </Image>
-    <Image Include="Bloom\wood.png">
+    <Image Include="Deferred Shading\wood.png">
       <Filter>Sources</Filter>
     </Image>
   </ItemGroup>
