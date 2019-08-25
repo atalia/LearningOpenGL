@@ -2,6 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Deferred Shading\shader.frag">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="Deferred Shading\shader.vert">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sources">
@@ -35,6 +41,12 @@
       <Filter>Sources</Filter>
     </Image>
     <Image Include="Deferred Shading\wood.png">
+      <Filter>Sources</Filter>
+    </Image>
+    <Image Include="Deferred Shading\brickwall.jpg">
+      <Filter>Sources</Filter>
+    </Image>
+    <Image Include="Deferred Shading\brickwall_normal.jpg">
       <Filter>Sources</Filter>
     </Image>
   </ItemGroup>
