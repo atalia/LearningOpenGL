@@ -155,6 +155,43 @@ int main()
 	glUniformBlockBinding(shader.Program, matricesIndex, bindingpoint);
 
 
+	GLuint gBuffer;
+	glGenFramebuffers(1, &gBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+
+	GLuint gPosition;
+	glGenTextures(1, &gPosition);
+	glBindTexture(GL_TEXTURE_2D, gPosition);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPosition, 0);
+
+	GLuint gNormal;
+	glGenTextures(1, &gNormal);
+	glBindTexture(GL_TEXTURE_2D, gNormal);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gNormal, 0);
+
+	GLuint gAlbedoSpec;
+	glGenTextures(1, &gAlbedoSpec);
+	glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedoSpec, 0);
+
+	GLuint gDepth;
+	glGenRenderbuffers(1, &gDepth);
+	glBindRenderbuffer(GL_RENDERBUFFER, gDepth);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT);
+	glFramebufferRenderbuffer(GL_RENDERBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, gDepth);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
 	GLfloat lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
@@ -230,49 +267,54 @@ void renderTexture()
 
 
 
-//画100个箱子
+//画10000个箱子
 void renderModels(Shader& shader)
 {
 	static GLuint cubeVAO;
-	unsigned int amount = 4;
+	unsigned int amount = 10000;
 	if (cubeVAO == 0)
 	{
 		GLfloat vertices[] = {
 
 			-1.0, -1.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, -0.0, -0.0, -0.0, -1.0, -0.0, 0.0, 0.0, -1.0,
-			1.0, 1.0, -1.0, 0.0, 0.0, -1.0, 1.0, 1.0, 1.0, -0.0, -0.0, -0.0, -1.0, -0.0, 0.0, 0.0, -1.0,
-			1.0, -1.0, -1.0, 0.0, 0.0, -1.0, 1.0, 0.0, 1.0, -0.0, -0.0, -0.0, -1.0, -0.0, 0.0, 0.0, -1.0,
-			1.0, 1.0, -1.0, 0.0, 0.0, -1.0, 1.0, 1.0, 1.0, -0.0, -0.0, -0.0, -1.0, -0.0, 0.0, 0.0, -1.0,
+			 1.0, 1.0, -1.0, 0.0, 0.0, -1.0, 1.0, 1.0, 1.0, -0.0, -0.0, -0.0, -1.0, -0.0, 0.0, 0.0, -1.0,
+			 1.0, -1.0, -1.0, 0.0, 0.0, -1.0, 1.0, 0.0, 1.0, -0.0, -0.0, -0.0, -1.0, -0.0, 0.0, 0.0, -1.0,
+			 1.0, 1.0, -1.0, 0.0, 0.0, -1.0, 1.0, 1.0, 1.0, -0.0, -0.0, -0.0, -1.0, -0.0, 0.0, 0.0, -1.0,
 			-1.0, -1.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, 1.0, -0.0, -0.0, -0.0, -1.0, -0.0, 0.0, 0.0, -1.0,
 			-1.0, 1.0, -1.0, 0.0, 0.0, -1.0, 0.0, 1.0, 1.0, -0.0, -0.0, -0.0, -1.0, -0.0, 0.0, 0.0, -1.0,
+
 			-1.0, -1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
-			1.0, -1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
-			1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
-			1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, -0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
-			-1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, -0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+			 1.0, -1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+			 1.0, 1.0,  1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+			 1.0, 1.0,  1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, -0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+			-1.0, 1.0,  1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, -0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
 			-1.0, -1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, -0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+			
 			-1.0, 1.0, 1.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, -1.0, 0.0, 0.0,
 			-1.0, 1.0, -1.0, -1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, -1.0, 0.0, 0.0,
 			-1.0, -1.0, -1.0, -1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, -1.0, 0.0, 0.0,
 			-1.0, -1.0, -1.0, -1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, -1.0, 0.0, 0.0,
 			-1.0, -1.0, 1.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, -1.0, 0.0, 0.0,
 			-1.0, 1.0, 1.0, -1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, -1.0, 0.0, 0.0,
-			1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
-			1.0, -1.0, -1.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
-			1.0, 1.0, -1.0, 1.0, 0.0, 0.0, 1.0, 1.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
-			1.0, -1.0, -1.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
-			1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
-			1.0, -1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
+			
+			 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
+			 1.0, -1.0, -1.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
+			 1.0, 1.0, -1.0, 1.0, 0.0, 0.0, 1.0, 1.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
+			 1.0, -1.0, -1.0, 1.0, 0.0, 0.0, 0.0, 1.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
+			 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
+			 1.0, -1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -0.0, 1.0, -0.0, -0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
+			 
 			-1.0, -1.0, -1.0, 0.0, -1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, -0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
-			1.0, -1.0, -1.0, 0.0, -1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, -0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
-			1.0, -1.0, 1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, -0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
-			1.0, -1.0, 1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, -0.0, -0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
+			 1.0, -1.0, -1.0, 0.0, -1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, -0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
+			 1.0, -1.0, 1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, -0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
+			 1.0, -1.0, 1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 1.0, -0.0, -0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
 			-1.0, -1.0, 1.0, 0.0, -1.0, 0.0, 0.0, 0.0, 1.0, -0.0, -0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
 			-1.0, -1.0, -1.0, 0.0, -1.0, 0.0, 0.0, 1.0, 1.0, -0.0, -0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0,
+			
 			-1.0, 1.0, -1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0,
-			1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0,
-			1.0, 1.0, -1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0,
-			1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, -0.0, -0.0, 0.0, -1.0, 0.0, 1.0, 0.0,
+			 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0,
+			 1.0, 1.0, -1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0,
+			 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, -0.0, -0.0, 0.0, -1.0, 0.0, 1.0, 0.0,
 			-1.0, 1.0, -1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, -0.0, -0.0, 0.0, -1.0, 0.0, 1.0, 0.0,
 			-1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.0, -0.0, 0.0, -1.0, 0.0, 1.0, 0.0,
 			/*
@@ -323,7 +365,7 @@ void renderModels(Shader& shader)
 		
 		glm::mat4* modelMatrices;
 		modelMatrices = new glm::mat4[amount];
-		/*
+		
 		srand(glfwGetTime());
 		GLfloat radius = 10.0f;
 		GLfloat offset = 2.5f;
@@ -349,28 +391,9 @@ void renderModels(Shader& shader)
 			modelMatrices[i] = model;
 			//matrixShow(modelMatrices[i]);
 		}
-		*/
-		glm::mat4 model(1.0f);
-		model = glm::translate(model, glm::vec3(5.0f, -5.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		modelMatrices[0] = model;
+		
 
-		model = glm::mat3(1.0f);
-		model = glm::translate(model, glm::vec3(5.0f, 5.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		modelMatrices[1] = model;
-
-		model = glm::mat3(1.0f);
-		model = glm::translate(model, glm::vec3(-5.0f, -5.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		modelMatrices[2] = model;
-
-		model = glm::mat3(1.0f);
-		model = glm::translate(model, glm::vec3(-5.0f, 5.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		modelMatrices[3] = model;
-
-		matrixShow(model);
+		//matrixShow(model);
 		glGenVertexArrays(1, &cubeVAO);
 
 		GLuint cubeVBO[2];

@@ -33,9 +33,10 @@ void main()
 	vs_out.fragPos = vec3(model * vec4(postion, 1.0f));
 	vs_out.texCoord = texCoord;
 	vs_out.normal = normalize(transpose(inverse(mat3(model))) * normal);
-	vec3 tangent = vec3(model * vec4(tbn_tangent, 1.0f));
-	vec3 bitangent = vec3(model * vec4(tbn_bitangent, 1.0f));
-	vec3 t_normal = vec3(model * vec4(tbn_normal, 1.0f));
+	//向量的话，这里w要设置为0，不要设为1！！！！！
+	vec3 tangent = vec3(model * vec4(tbn_tangent, 0.0f));
+	vec3 bitangent = vec3(model * vec4(tbn_bitangent, 0.0f));
+	vec3 t_normal = vec3(model * vec4(tbn_normal, 0.0f));
 	vs_out.TBN = mat3(tangent, bitangent, t_normal); 
 }
 
