@@ -23,10 +23,6 @@ out VS_OUT{
 	vec3 fragPos;
 	vec2 texCoord;
 	vec3 normal;
-	vec3 t;
-	vec3 b;
-	vec3 n;
-	mat3 model;
 	mat3 TBN;
 }vs_out;
 
@@ -40,11 +36,6 @@ void main()
 	vec3 tangent = vec3(model * vec4(tbn_tangent, 1.0f));
 	vec3 bitangent = vec3(model * vec4(tbn_bitangent, 1.0f));
 	vec3 t_normal = vec3(model * vec4(tbn_normal, 1.0f));
-	vs_out.t = tangent;
-	vs_out.b = bitangent;
-	vs_out.n = t_normal;
-	vs_out.model = mat3(model);
-	//vs_out.TBN = mat3(tangent, bitangent, t_normal);
-	vs_out.TBN = transpose(mat3(tangent, bitangent, t_normal)); 
+	vs_out.TBN = mat3(tangent, bitangent, t_normal); 
 }
 
