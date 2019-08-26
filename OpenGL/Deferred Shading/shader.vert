@@ -33,7 +33,7 @@ void main()
 	vs_out.fragPos = vec3(model * vec4(postion, 1.0f));
 	vs_out.texCoord = texCoord;
 	vs_out.normal = normalize(transpose(inverse(mat3(model))) * normal);
-	//ÏòÁ¿µÄ»°£¬ÕâÀïwÒªÉèÖÃÎª0£¬²»ÒªÉèÎª1£¡£¡£¡£¡£¡
+	//å‘é‡çš„è¯ï¼Œè¿™é‡Œwè¦è®¾ç½®ä¸º0ï¼Œä¸è¦è®¾ä¸º1ï¼ï¼ï¼ï¼ï¼
 	vec3 tangent = vec3(model * vec4(tbn_tangent, 0.0f));
 	vec3 bitangent = vec3(model * vec4(tbn_bitangent, 0.0f));
 	vec3 t_normal = vec3(model * vec4(tbn_normal, 0.0f));
